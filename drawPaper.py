@@ -74,6 +74,8 @@ def drawPaper(fh="none", **kwargs):
     x_zero = x_cm_zero*x_scale;
     y_zero = y_cm_zero*y_scale;
     
+    #x_label_range = (x_cm_min*x_scale, x_cm_max*x_scale) 
+    
     #x_orig = x_cm_orig*x_scale;
     #y_orig = y_cm_orig*y_scale;
     
@@ -89,7 +91,7 @@ def drawPaper(fh="none", **kwargs):
         #print(axi)
     
     
-    #add axes for grid to background
+    #axes for grid to background
     axGrid = fh.add_axes([0,0,1,1])
     axGrid.zorder = -2;
     axGrid.xaxis.set_ticks(np.arange(0, x_cm, x_res))
@@ -98,27 +100,37 @@ def drawPaper(fh="none", **kwargs):
     axGrid.axes.set_ylim((0, y_cm))
     axGrid.axes.grid(axis='both')
     axGrid.set_axisbelow(True)
-    plt.arrow(x_cm_min,y_cm_orig,(x_cm_max-x_cm_min),0,width=0.02,head_width=0.2,head_length=0.4,length_includes_head=True,fc='black')
-    plt.arrow(x_cm_orig,y_cm_min,0,(y_cm_max-y_cm_min),width=0.02,head_width=0.2,head_length=0.4,length_includes_head=True,fc='black')
-    axGrid.annotate('$t/\mathrm{s}$', xy=(0, 0), xytext=(x_cm_max-0.1, y_cm_orig-0.4))
-    axGrid.annotate('$u_\mathrm{x}/\mathrm{V}$', xy=(0, 0), xytext=(x_cm_orig-0.4, y_cm_max+0.15))
+    plt.arrow(x_cm_min,y_cm_orig,(x_cm_max+0.2-x_cm_min),0,width=0.02,head_width=0.2,head_length=0.3,length_includes_head=False,fc='black')
+    plt.arrow(x_cm_orig,y_cm_min,0,(y_cm_max+0.2-y_cm_min),width=0.02,head_width=0.2,head_length=0.3,length_includes_head=False,fc='black')
+    axGrid.annotate('$t/\mathrm{s}$', xy=(0, 0), xytext=(x_cm_max-0.1+0.5, y_cm_orig-0.4))
+    axGrid.annotate('$u_\mathrm{x}/\mathrm{V}$', xy=(0, 0), xytext=(x_cm_orig-0.4, y_cm_max+0.15+0.5))
     
     
     
-    #add axes for tick lables
+    #axes for x-y-tick lables
     label_offs_x = (x_cm_zero-x_cm_min)*x_scale
     label_offs_y = (y_cm_zero-y_cm_min)*y_scale
     label_width = (x_cm_max-x_cm_min)*x_scale
     label_height = (y_cm_max-y_cm_min)*y_scale
     
-    axLabels = fh.add_axes([x_cm_min/x_cm,y_cm_min/y_cm,(x_cm_max-x_cm_min)/x_cm,(y_cm_max-y_cm_min)/y_cm])
-    axLabels.zorder = -1
-    axLabels.patch.set_alpha(0)
-    axLabels.xaxis.set_ticks(np.arange(-2, 2, 0.25))
-    axLabels.yaxis.set_ticks(np.arange(-2, 2, 0.5))
-    axLabels.axes.set_xlim((-label_offs_x, label_width-label_offs_x)) 
-    axLabels.axes.set_ylim((-label_offs_y, label_height-label_offs_y))
-    axLabels.set_frame_on(False)
+    #axLabels = fh.add_axes([x_cm_min/x_cm,y_cm_min/y_cm,(x_cm_max-x_cm_min)/x_cm,(y_cm_max-y_cm_min)/y_cm])
+    axLabelsx = fh.add_axes([x_cm_min/x_cm,y_cm_orig/y_cm,(x_cm_max-x_cm_min)/x_cm,(y_cm_max-y_cm_orig)/y_cm])
+    axLabelsy = fh.add_axes([x_cm_orig/x_cm,y_cm_min/y_cm,(x_cm_max-x_cm_orig)/x_cm,(y_cm_max-y_cm_min)/y_cm])
+    axLabelsx.zorder = -1
+    axLabelsy.zorder = -1
+    axLabelsx.patch.set_alpha(0)
+    axLabelsy.patch.set_alpha(0)
+    #axLabelsx.xaxis.set_ticks(np.arange(x_label_range[0], x_label_range[1], 0.25))
+    axLabelsx.xaxis.set_ticks(np.arange(-2, 2, 0.5))
+    axLabelsx.yaxis.set_ticks(np.array([]))
+    axLabelsy.xaxis.set_ticks(np.array([]))
+    axLabelsy.yaxis.set_ticks(np.arange(-2, 2, 0.5))
+    axLabelsx.axes.set_xlim((-label_offs_x, label_width-label_offs_x)) 
+    axLabelsx.axes.set_ylim((-label_offs_y, label_height-label_offs_y))
+    axLabelsy.axes.set_xlim((-label_offs_x, label_width-label_offs_x)) 
+    axLabelsy.axes.set_ylim((-label_offs_y, label_height-label_offs_y))
+    axLabelsx.set_frame_on(False)
+    axLabelsy.set_frame_on(False)
     
     
     

@@ -1,4 +1,4 @@
-#   Copyright (c) 2020 Fabian Mink <fabian.mink@gmx.de>
+#   Copyright (c) 2024 Fabian Mink <fabian.mink@gmx.de>
 #
 #   All rights reserved.
 #
@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-#Abmaﬂe
+#Abmasse
 # myDim = {'x_cm': 15,
 #          'y_cm': 12,
 #          'x_cm_orig' : 1,
@@ -45,7 +45,9 @@ import numpy as np
 #          'y_scale': 0.25
 # }
 
-myDim = {'x_cm_zero' : 1.5,
+myDim = {'x_cm_orig' : 1.0,
+         'x_cm_zero' : 1.0,
+         'y_cm_orig' : 1.0,
          'y_cm_zero': 5,
          'x_scale': 0.1,
          'y_scale': 0.25,

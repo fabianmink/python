@@ -25,6 +25,7 @@
 import numpy as np 
 from matplotlib import pyplot as plt 
 import matplotlib as mpl
+import math
 
 def drawPaper(fh="none", **kwargs):
     #print(fig)
@@ -74,7 +75,15 @@ def drawPaper(fh="none", **kwargs):
     x_zero = x_cm_zero*x_scale;
     y_zero = y_cm_zero*y_scale;
     
-    #x_label_range = (x_cm_min*x_scale, x_cm_max*x_scale) 
+    x_cm_tick = kwargs.get('x_cm_tick', 1)
+    y_cm_tick = kwargs.get('y_cm_tick', 1)
+    
+    x_label = kwargs.get('x_label', '$x$')
+    y_label = kwargs.get('y_label', '$y$')
+    
+    
+    #x_tickres = x_scale  #default
+    
     
     #x_orig = x_cm_orig*x_scale;
     #y_orig = y_cm_orig*y_scale;
@@ -88,6 +97,8 @@ def drawPaper(fh="none", **kwargs):
         
         axi.set_xlim((0-x_zero, x_width-x_zero)) #must be adapted acc to scaling
         axi.set_ylim((0-y_zero, y_height-y_zero))
+        
+        #todo:get max zorder!
         #print(axi)
     
     
@@ -102,35 +113,44 @@ def drawPaper(fh="none", **kwargs):
     axGrid.set_axisbelow(True)
     plt.arrow(x_cm_min,y_cm_orig,(x_cm_max+0.2-x_cm_min),0,width=0.02,head_width=0.2,head_length=0.3,length_includes_head=False,fc='black')
     plt.arrow(x_cm_orig,y_cm_min,0,(y_cm_max+0.2-y_cm_min),width=0.02,head_width=0.2,head_length=0.3,length_includes_head=False,fc='black')
-    axGrid.annotate('$t/\mathrm{s}$', xy=(0, 0), xytext=(x_cm_max-0.1+0.5, y_cm_orig-0.4))
-    axGrid.annotate('$u_\mathrm{x}/\mathrm{V}$', xy=(0, 0), xytext=(x_cm_orig-0.4, y_cm_max+0.15+0.5))
+    axGrid.annotate(x_label, xy=(0, 0), xytext=(x_cm_max-0.1+0.5, y_cm_orig-0.4))
+    axGrid.annotate(y_label, xy=(0, 0), xytext=(x_cm_orig-0.4, y_cm_max+0.15+0.5))
     
     
     
     #axes for x-y-tick lables
-    label_offs_x = (x_cm_zero-x_cm_min)*x_scale
-    label_offs_y = (y_cm_zero-y_cm_min)*y_scale
-    label_width = (x_cm_max-x_cm_min)*x_scale
-    label_height = (y_cm_max-y_cm_min)*y_scale
+    ticks_offs_x = (x_cm_zero-x_cm_min)*x_scale
+    ticks_offs_y = (y_cm_zero-y_cm_min)*y_scale
+    ticks_width = (x_cm_max-x_cm_min)*x_scale
+    ticks_height = (y_cm_max-y_cm_min)*y_scale
     
-    #axLabels = fh.add_axes([x_cm_min/x_cm,y_cm_min/y_cm,(x_cm_max-x_cm_min)/x_cm,(y_cm_max-y_cm_min)/y_cm])
-    axLabelsx = fh.add_axes([x_cm_min/x_cm,y_cm_orig/y_cm,(x_cm_max-x_cm_min)/x_cm,(y_cm_max-y_cm_orig)/y_cm])
-    axLabelsy = fh.add_axes([x_cm_orig/x_cm,y_cm_min/y_cm,(x_cm_max-x_cm_orig)/x_cm,(y_cm_max-y_cm_min)/y_cm])
-    axLabelsx.zorder = -1
-    axLabelsy.zorder = -1
-    axLabelsx.patch.set_alpha(0)
-    axLabelsy.patch.set_alpha(0)
-    #axLabelsx.xaxis.set_ticks(np.arange(x_label_range[0], x_label_range[1], 0.25))
-    axLabelsx.xaxis.set_ticks(np.arange(-2, 2, 0.5))
-    axLabelsx.yaxis.set_ticks(np.array([]))
-    axLabelsy.xaxis.set_ticks(np.array([]))
-    axLabelsy.yaxis.set_ticks(np.arange(-2, 2, 0.5))
-    axLabelsx.axes.set_xlim((-label_offs_x, label_width-label_offs_x)) 
-    axLabelsx.axes.set_ylim((-label_offs_y, label_height-label_offs_y))
-    axLabelsy.axes.set_xlim((-label_offs_x, label_width-label_offs_x)) 
-    axLabelsy.axes.set_ylim((-label_offs_y, label_height-label_offs_y))
-    axLabelsx.set_frame_on(False)
-    axLabelsy.set_frame_on(False)
+    #axTicks = fh.add_axes([x_cm_min/x_cm,y_cm_min/y_cm,(x_cm_max-x_cm_min)/x_cm,(y_cm_max-y_cm_min)/y_cm])
+    axTicksx = fh.add_axes([x_cm_min/x_cm,y_cm_orig/y_cm,(x_cm_max-x_cm_min)/x_cm,(y_cm_max-y_cm_orig)/y_cm])
+    axTicksy = fh.add_axes([x_cm_orig/x_cm,y_cm_min/y_cm,(x_cm_max-x_cm_orig)/x_cm,(y_cm_max-y_cm_min)/y_cm])
+    #axTicksx.zorder = -1
+    #axTicksy.zorder = -1
+    axTicksx.zorder = 100
+    axTicksy.zorder = 100
+    axTicksx.patch.set_alpha(0)
+    axTicksy.patch.set_alpha(0)
+    
+    x_tick_range = (math.floor(x_cm_min-x_cm_zero)*x_cm_tick*x_scale, (math.ceil(x_cm_max-x_cm_zero)+0.1)*x_cm_tick*x_scale) 
+    y_tick_range = (math.floor(y_cm_min-y_cm_zero)*y_cm_tick*y_scale, (math.ceil(y_cm_max-y_cm_zero)+0.1)*y_cm_tick*y_scale)
+    #print(x_tick_range)
+    #print(y_tick_range)
+    
+    axTicksx.xaxis.set_ticks(np.arange(x_tick_range[0], x_tick_range[1], x_cm_tick*x_scale))
+    #axTicksx.xaxis.set_ticks(np.arange(-2, 2, 0.5))
+    axTicksx.yaxis.set_ticks(np.array([]))
+    axTicksy.xaxis.set_ticks(np.array([]))
+    #axTicksy.yaxis.set_ticks(np.arange(-2, 2, 0.5))
+    axTicksy.yaxis.set_ticks(np.arange(y_tick_range[0], y_tick_range[1], y_cm_tick*y_scale))
+    axTicksx.axes.set_xlim((-ticks_offs_x, ticks_width-ticks_offs_x)) 
+    axTicksx.axes.set_ylim((-ticks_offs_y, ticks_height-ticks_offs_y))
+    axTicksy.axes.set_xlim((-ticks_offs_x, ticks_width-ticks_offs_x)) 
+    axTicksy.axes.set_ylim((-ticks_offs_y, ticks_height-ticks_offs_y))
+    axTicksx.set_frame_on(False)
+    axTicksy.set_frame_on(False)
     
     
     

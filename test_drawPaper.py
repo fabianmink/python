@@ -30,49 +30,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-#Abmasse
-# myDim = {'x_cm': 15,
-#          'y_cm': 12,
-#          'x_cm_orig' : 1,
-#          'y_cm_orig': 5,
-#          'x_cm_min' : 0.5,
-#          'y_cm_min' : 3.5,
-#          'x_shift' : 1,
-#          'y_shift' : 2,
-#          'x_cm_max': 13.5,
-#          'y_cm_max': 11,
-#          'x_scale': 0.1,
-#          'y_scale': 0.25
-# }
-
-myDim = {'x_cm_orig' : 1.0,
-         'x_cm_zero' : 1.0,
-         'y_cm_orig' : 1.0,
+myDim = {'x_cm_min' : 1.375,
+         'x_cm_zero' : 1.5, 
          'y_cm_zero': 5,
          'x_scale': 0.1,
          'y_scale': 0.25,
-         'x_cm' : 16
+         'x_cm' : 16,
+         'y_cm' : 11,
+         'x_label' : '$t/\mathrm{s}$',
+         'y_label' : '$u_\mathrm{x}/\mathrm{V}$'
 }
 
 
-t = np.linspace(-1, 1, 1000)
-f = 5
+t = np.linspace(-0.05, 1.35, 1000)
+f = 2
 u = np.sin(2.0*np.pi*f*t)
 
 plt.plot(t, u, 'r-', lw=1)
 fig = plt.gcf()
 
 dp.drawPaper(fig, **myDim);
-
-#fh = dp.drawPaper(test=2)
-#dp.drawPaper("hello", test=2)
-#dp.drawPaper("hello", x_cm=1, test=2)
-
-#dp.drawPaper("hello", x_cm=1, test=2, 7) geht nicht
-
-
-#dp.drawPaper(myDim,"test",0);
-
 plt.savefig("test.png", dpi=300)
 
 

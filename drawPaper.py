@@ -131,13 +131,24 @@ def drawPaper(fh="none", **kwargs):
     axTicksx.patch.set_alpha(0)
     axTicksy.patch.set_alpha(0)
     
-    x_tick_range = (math.floor(x_cm_min-x_cm_zero)*x_cm_tick*x_scale, (math.ceil(x_cm_max-x_cm_zero)+0.1)*x_cm_tick*x_scale) 
-    y_tick_range = (math.floor(y_cm_min-y_cm_zero)*y_cm_tick*y_scale, (math.ceil(y_cm_max-y_cm_zero)+0.1)*y_cm_tick*y_scale)
-
-    axTicksx.xaxis.set_ticks(np.arange(x_tick_range[0], x_tick_range[1], x_cm_tick*x_scale))
+    if x_cm_tick > 0:
+        x_tick_range = (math.floor(x_cm_min-x_cm_zero)*x_cm_tick*x_scale, (math.ceil(x_cm_max-x_cm_zero)+0.1)*x_cm_tick*x_scale) 
+        axTicksx.xaxis.set_ticks(np.arange(x_tick_range[0], x_tick_range[1], x_cm_tick*x_scale))
+    else:
+        axTicksx.xaxis.set_ticks(np.array([]))
+    
     axTicksx.yaxis.set_ticks(np.array([]))
+    
     axTicksy.xaxis.set_ticks(np.array([]))
-    axTicksy.yaxis.set_ticks(np.arange(y_tick_range[0], y_tick_range[1], y_cm_tick*y_scale))
+    if y_cm_tick > 0:
+        y_tick_range = (math.floor(y_cm_min-y_cm_zero)*y_cm_tick*y_scale, (math.ceil(y_cm_max-y_cm_zero)+0.1)*y_cm_tick*y_scale)
+        axTicksy.yaxis.set_ticks(np.arange(y_tick_range[0], y_tick_range[1], y_cm_tick*y_scale))
+    else:
+        axTicksy.yaxis.set_ticks(np.array([]))
+    
+    
+    
+    
     axTicksx.axes.set_xlim((-ticks_offs_x, ticks_width-ticks_offs_x)) 
     axTicksx.axes.set_ylim((-ticks_offs_y, ticks_height-ticks_offs_y))
     axTicksy.axes.set_xlim((-ticks_offs_x, ticks_width-ticks_offs_x)) 

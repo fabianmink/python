@@ -23,13 +23,11 @@
 #   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-#clear myDim;
-
 import drawPaper as dp
 import matplotlib.pyplot as plt
 import numpy as np
 
-
+# Sine function test example
 myDim = {'x_cm_min' : 1.375,
          'x_cm_zero' : 1.5, 
          'y_cm_zero': 5,
@@ -50,6 +48,28 @@ plt.plot(t, u, 'r-', lw=1)
 fig = plt.gcf()
 
 dp.drawPaper(fig, **myDim);
-plt.savefig("test.png", dpi=300)
+plt.savefig("test_sin.png", dpi=300)
+
+# Arrow test example
+myDim = {'x_cm_zero' : 5, 
+         'y_cm_zero': 5,
+         'x_scale': 1,
+         'y_scale': 1,
+         'x_cm_tick' : 0,  #no ticks / tick labels
+         'y_cm_tick' : 0,
+         'x_cm' : 16,
+         'y_cm' : 11,
+         'x_label' : 'Re',
+         'y_label' : 'Im'
+}
+
+
+plt.clf()
+
+plt.arrow(0,0,1,1,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='red',fc='red')
+plt.arrow(1,1,4,2,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='blue',fc='blue')
+plt.arrow(5,3,-2,-2.5,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='green',fc='green')
+dp.drawPaper(fig, **myDim);
+plt.savefig("test_arrow.png", dpi=300)
 
 

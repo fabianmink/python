@@ -108,7 +108,7 @@ def drawPaper(fh="none", **kwargs):
     axGrid.yaxis.set_ticks(np.arange(0, y_cm, y_res))
     axGrid.axes.set_xlim((0, x_cm)) 
     axGrid.axes.set_ylim((0, y_cm))
-    axGrid.axes.grid(axis='both')
+    axGrid.axes.grid(axis='both', linewidth=0.5, color = 'lightgrey')
     axGrid.set_axisbelow(True)
     plt.arrow(x_cm_min,y_cm_orig,(x_cm_max+0.2-x_cm_min),0,width=0.02,head_width=0.2,head_length=0.3,length_includes_head=False,fc='black')
     plt.arrow(x_cm_orig,y_cm_min,0,(y_cm_max+0.2-y_cm_min),width=0.02,head_width=0.2,head_length=0.3,length_includes_head=False,fc='black')

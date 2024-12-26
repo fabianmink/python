@@ -1,4 +1,3 @@
-#see: https://matplotlib.org/stable/gallery/widgets/index.html
 import matplotlib.pyplot as plt
 import numpy as np
 #import math
@@ -17,24 +16,30 @@ t = np.linspace(0.00, 2.0, 500)
 fading = np.linspace(0.00, 1.0, 10)
 
 N = 30;
-A = 1;
 
 k = np.arange(0, N+1)
 
+
 #Rechteckfunktion
-ak = 0*k.astype(np.float64);
-bk = np.append(0, (A * 4/np.pi * ((k[1:]%2) == 1) * 1/k[1:]));
+def rect(k, A=1):
+    ak = 0*k.astype(np.float64);
+    bk = np.append(0, (A * 4/np.pi * ((k[1:]%2) == 1) * 1/k[1:]));    
+    return ak,bk
 
 #Rechteckpuls, Tastgrad d
-#d = 0.5
-#ak = 2*d*np.sinc(k*d)
-#ak[0]=d
-#bk = 0*k.astype(np.float64);
+def pulse(k, d=0.5, A=1):
+    ak = 2*d*np.sinc(k*d)
+    ak[0]=d
+    bk = 0*k.astype(np.float64);
+    bk = A*bk
+    return ak,bk
 
 #Symmetrischer Rechteckpuls
-#ak = 0*k.astype(np.float64);
-#alpha = 30 * np.pi /180 
-#bk = np.append(0, (A * 4/np.pi * np.cos(k[1:]*alpha) * ((k[1:]%2) == 1) * 1/k[1:]));
+def symmPulse(k, alpha=30, A=1):
+    ak = 0*k.astype(np.float64);
+    alpha = alpha * np.pi /180 
+    bk = np.append(0, (A * 4/np.pi * np.cos(k[1:]*alpha) * ((k[1:]%2) == 1) * 1/k[1:]));
+    return ak,bk
 
 
 #Betrag
@@ -72,11 +77,9 @@ ax_bar.set_xlabel("$k$")
 ax_bar.set_ylabel("$x_k$")
 ax_bar.set_position([0.125,0.25,0.8,0.25])
 
-# adjust the main plot to make room for the sliders
-#fig.subplots_adjust(left=0.125, bottom=0.3)
-
-# Make a horizontal slider to control the frequency.
-axharmonic = fig.add_axes([0.125, 0.025, 0.75, 0.03])
+#Sliders
+#see: https://matplotlib.org/stable/gallery/widgets/index.html
+axharmonic = fig.add_axes([0.075, 0.025, 0.375, 0.03])
 harmonic_slider = Slider(
     ax=axharmonic,
     label='N',
@@ -86,7 +89,7 @@ harmonic_slider = Slider(
     valstep=1,
 )
 
-axfade = fig.add_axes([0.125, 0.075, 0.75, 0.03])
+axfade = fig.add_axes([0.075, 0.075, 0.375, 0.03])
 fade_slider = Slider(
     ax=axfade,
     label='Fade',
@@ -95,7 +98,7 @@ fade_slider = Slider(
     valinit=1,
 )
 
-axshift = fig.add_axes([0.125, 0.125, 0.75, 0.03])
+axshift = fig.add_axes([0.075, 0.125, 0.375, 0.03])
 shift_slider = Slider(
     ax=axshift,
     label='Shift',
@@ -104,31 +107,32 @@ shift_slider = Slider(
     valinit=0,
 )
 
-# Make a vertically oriented slider to control the amplitude
-# axamp = fig.add_axes([0.1, 0.25, 0.0225, 0.63])
-# amp_slider = Slider(
-#     ax=axamp,
-#     label="Amplitude",
-#     valmin=0,
-#     valmax=10,
-#     valinit=init_amplitude,
-#     orientation="vertical"
-# )
-
+axpara = fig.add_axes([0.55, 0.125, 0.375, 0.03])
+para_slider = Slider(
+    ax=axpara,
+    label='para',
+    valmin=0,
+    valmax=1,
+    valinit=0.5,
+)
 
 # The function to be called anytime a slider's value changes
 def update(val):
     kpl = int(harmonic_slider.val)
     fade = fade_slider.val
+    alpha_shift = 2*np.pi*k*shift_slider.val/360
+    para = para_slider.val
+    
+    #select signal    
+    #ak,bk = symmPulse(k,90*para)
+    ak,bk = pulse(k,1*para)
     
     #fade, kpl = math.modf(harmonic_slider.val)#
     #kpl = int(kpl) +1
     #if(kpl == N):
     #    kpl = N-1
     #    fade = 1
-    
-    alpha_shift = 2*np.pi*k*shift_slider.val/360
-    
+        
     ak_shift =  np.cos(alpha_shift) * ak - np.sin(alpha_shift) * bk    
     bk_shift =  np.sin(alpha_shift) * ak + np.cos(alpha_shift) * bk
 
@@ -180,6 +184,7 @@ def reset(event):
 harmonic_slider.on_changed(update)
 shift_slider.on_changed(update)
 fade_slider.on_changed(update)
+para_slider.on_changed(update)
 #button.on_clicked(reset)
 
 update(0)

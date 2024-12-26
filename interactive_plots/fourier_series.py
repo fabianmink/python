@@ -172,8 +172,37 @@ def update(val):
     if type_selector == 2:
         ak,bk = symmPulse(k,90*para)
         
-    #abs value
+    #abs value (Amplitude)
     ck = np.sqrt(np.square(ak) + np.square(bk))     
+    Ck_RMS = ck/np.sqrt(2)
+    Ck_RMS[0] = ck[0]
+    
+    #print(Ck_RMS)
+    sig_RMS = np.sqrt(np.sum(np.square(Ck_RMS)))
+    
+    harmonics_RMS = np.sqrt(np.sum(np.square(Ck_RMS[2:])))
+    #if DC: harmonics_RMS = np.sqrt(np.sum(np.square(Ck_RMS[1:])))
+    
+    
+    thd_r = np.nan
+    rel_fund = np.nan
+    thd_f = np.nan
+    if(sig_RMS > 0.0):
+        #Klirrfaktor
+        thd_r = harmonics_RMS/sig_RMS
+        #Grundschwingungsgehalt
+        rel_fund = Ck_RMS[1]/sig_RMS
+        #if DC: rel_fund = Ck_RMS[0]/sig_RMS
+    
+    if(Ck_RMS[1] > 0.0):
+        #THD, related to fundamental
+        thd_f = harmonics_RMS/Ck_RMS[1]
+        #if DC: rel_fund = harmonics_RMS/Ck_RMS[0]
+        
+    
+    
+    
+    print("RMS: %05.2f, RMS of Harmonics: %05.2f, THDr: %05.4f, THDf: %05.4f, Relative Fund.: %05.4f" % (sig_RMS, harmonics_RMS, thd_r, thd_f, rel_fund) )
     
     ak_shift =  np.cos(alpha_shift) * ak - np.sin(alpha_shift) * bk    
     bk_shift =  np.sin(alpha_shift) * ak + np.cos(alpha_shift) * bk

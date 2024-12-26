@@ -22,21 +22,19 @@ A = 1;
 k = np.arange(0, N+1)
 
 #Rechteckfunktion
-#ak = 0*k.astype(np.float64);
-#bk = A * 4/np.pi *( (k%2) == 1) * (k>0) * 1/k;
-#bk[0] = 0;
+ak = 0*k.astype(np.float64);
+bk = np.append(0, (A * 4/np.pi * ((k[1:]%2) == 1) * 1/k[1:]));
 
 #Rechteckpuls, Tastgrad d
-#d = 0.4
-#ak = 2/np.pi/k * np.sin(k*np.pi*d)
-#ak[0] = d
+#d = 0.5
+#ak = 2*d*np.sinc(k*d)
+#ak[0]=d
 #bk = 0*k.astype(np.float64);
 
 #Symmetrischer Rechteckpuls
-ak = 0*k.astype(np.float64);
-alpha = 30 * np.pi /180 
-bk = A * 4/np.pi * np.cos(k*alpha) * ( (k%2) == 1) * (k>0) * 1/k;
-bk[0] = 0;
+#ak = 0*k.astype(np.float64);
+#alpha = 30 * np.pi /180 
+#bk = np.append(0, (A * 4/np.pi * np.cos(k[1:]*alpha) * ((k[1:]%2) == 1) * 1/k[1:]));
 
 
 #Betrag

@@ -61,15 +61,28 @@ def symmPulse(k, alpha=30, A=1):
 
 fig, (ax_x, ax_bar) = plt.subplots(2, 1)
 
-line_fade, = ax_x.plot(t, 0*t ,'k-', linewidth=2);
+line_signal, = ax_x.plot(t, 0*t ,'k-', linewidth=2);
 #line_cos, = ax_x.plot(t, 0*t ,'r-', linewidth=1);
 #line_sin, = ax_x.plot(t, 0*t ,'b-', linewidth=1);
 
 line_harmonics_cos = []
 line_harmonics_sin = []
 for ik in k:
-    line_harmonics_cos.append(  ax_x.plot(t, 0*t, linewidth=1)[0]  ) 
-    line_harmonics_sin.append(  ax_x.plot(t, 0*t, linewidth=1)[0]  ) 
+    
+    line_cos = ax_x.plot(t, 0*t, linewidth=1)[0]
+    line_sin = ax_x.plot(t, 0*t, linewidth=1)[0]
+    
+    if(ik == 0):
+        line_cos.set_color('black')
+        line_cos.set_linestyle('--')
+    
+    if(ik == 1):
+        line_cos.set_color('blue')
+        line_sin.set_color('red')
+        
+    line_harmonics_cos.append(line_cos) 
+    line_harmonics_sin.append(line_sin)
+        
 
 ax_x.set_axisbelow(True)
 ax_x.grid(1)
@@ -81,11 +94,12 @@ ax_x.set_position([0.125,0.6,0.8,0.35])
 
 
 
-bar_coeff_cos = ax_bar.bar(k-0.15, 0*k.astype(np.float64), 0.2, color='red'); 
-bar_coeff_sin = ax_bar.bar(k+0.15, 0*k.astype(np.float64), 0.2, color='blue'); 
-bar_coeff_abs = ax_bar.bar(k,     0*k.astype(np.float64), 0.1, color='grey'); 
+bar_coeff_cos = ax_bar.bar(k-0.15, 0*k.astype(np.float64), 0.2, color='red', label='cos'); 
+bar_coeff_sin = ax_bar.bar(k+0.15, 0*k.astype(np.float64), 0.2, color='blue', label='sin'); 
+bar_coeff_abs = ax_bar.bar(k,     0*k.astype(np.float64), 0.1, color='grey', label='abs'); 
 ax_bar.set_axisbelow(True)
 ax_bar.grid(1)
+ax_bar.legend()  
 
 
 ax_bar.set_xlim(-1, N+1)
@@ -217,9 +231,9 @@ def update(val):
     sig_upto_hrmc_k = np.cumsum(sig_hrmc_k, axis=0);
     
     if (kpl >= 1):
-        line_fade.set_ydata( (sig_upto_hrmc_k[kpl-1, :])*(1-fade) + (sig_upto_hrmc_k[kpl, : ])*fade   );
+        line_signal.set_ydata( (sig_upto_hrmc_k[kpl-1, :])*(1-fade) + (sig_upto_hrmc_k[kpl, : ])*fade   );
     else :
-        line_fade.set_ydata( (sig_upto_hrmc_k[kpl, : ])*fade   );
+        line_signal.set_ydata( (sig_upto_hrmc_k[kpl, : ])*fade   );
     #line_cos.set_ydata( (x_cos[kpl, : ])*fade   );
     #line_sin.set_ydata( (x_sin[kpl, : ])*fade   );
 
@@ -249,7 +263,8 @@ def update(val):
             else:
                 line_harmonics_cos[ik].set_visible(False)
                 line_harmonics_sin[ik].set_visible(False)
-                
+        #sine component for k=0 generally does not exist
+        line_harmonics_sin[0].set_visible(False)                
 
     
     

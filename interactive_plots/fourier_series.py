@@ -95,8 +95,8 @@ for ik in k:
         line_cos.set_linestyle('--')
     
     if(ik == 1):
-        line_cos.set_color('blue')
-        line_sin.set_color('red')
+        line_cos.set_color('red')
+        line_sin.set_color('blue')
         
     line_harmonics_cos.append(line_cos) 
     line_harmonics_sin.append(line_sin)

@@ -38,13 +38,18 @@ signal_types = ['Rectangle', 'Pulse', 'Symm. Pulse']
 type_selector = 0
 
 
-#Rechteckfunktion
+#Rectangular oscillation
 def rectangle(k, A=1):
     ak = 0*k.astype(np.float64);
     bk = np.append(0, (A * 4/np.pi * ((k[1:]%2) == 1) * 1/k[1:]));    
     return ak,bk
 
-#Rechteckpuls, Tastgrad d
+def rectangle_t(t, A=1):
+    t = np.divmod(t,1)[1]
+    x = A* (  1.0*(t < 0.5) - 1.0*(t > 0.5)  )
+    return x
+
+#Rectangular puls, duty cycle d
 def pulse(k, d=0.5, A=1):
     ak = 2*d*np.sinc(k*d)
     ak[0]=d
@@ -52,16 +57,29 @@ def pulse(k, d=0.5, A=1):
     bk = A*bk
     return ak,bk
 
-#Symmetrischer Rechteckpuls
+def pulse_t(t, d=0.5, A=1):
+    t = np.divmod(t+d/2,1)[1]  
+    x = A* (1.0*(t < d))
+    return x
+
+#Symmetric rectangular puls
 def symmPulse(k, alpha=30, A=1):
     ak = 0*k.astype(np.float64);
     alpha = alpha * np.pi /180 
     bk = np.append(0, (A * 4/np.pi * np.cos(k[1:]*alpha) * ((k[1:]%2) == 1) * 1/k[1:]));
     return ak,bk
 
+def symmPulse_t(t, alpha=30, A=1):
+    t = np.divmod(t,1)[1]
+    tcut = alpha/360
+    x = A* ( 1.0*np.logical_and(  t>tcut,     t<(0.5-tcut) )    
+           - 1.0*np.logical_and( t>(0.5+tcut),  t<(1-tcut) )  )
+    return x
+
 fig, (ax_x, ax_bar) = plt.subplots(2, 1)
 
-line_signal, = ax_x.plot(t, 0*t ,'k-', linewidth=2);
+line_realsignal, = ax_x.plot(t, 0*t, color='grey', linestyle='-', linewidth=2);
+line_signal, = ax_x.plot(t, 0*t, 'k-', linewidth=1);
 #line_cos, = ax_x.plot(t, 0*t ,'r-', linewidth=1);
 #line_sin, = ax_x.plot(t, 0*t ,'b-', linewidth=1);
 
@@ -94,9 +112,9 @@ ax_x.set_position([0.125,0.6,0.8,0.35])
 
 
 
-bar_coeff_cos = ax_bar.bar(k-0.15, 0*k.astype(np.float64), 0.2, color='red', label='cos'); 
-bar_coeff_sin = ax_bar.bar(k+0.15, 0*k.astype(np.float64), 0.2, color='blue', label='sin'); 
-bar_coeff_abs = ax_bar.bar(k,     0*k.astype(np.float64), 0.1, color='grey', label='abs'); 
+bar_coeff_cos = ax_bar.bar(k-0.2, 0*k.astype(np.float64), 0.2, color='red', label='cos'); 
+bar_coeff_sin = ax_bar.bar(k+0.2, 0*k.astype(np.float64), 0.2, color='blue', label='sin'); 
+bar_coeff_abs = ax_bar.bar(k,     0*k.astype(np.float64), 0.2, color='grey', label='abs'); 
 ax_bar.set_axisbelow(True)
 ax_bar.grid(1)
 ax_bar.legend()  
@@ -169,9 +187,12 @@ selectsignal_button = Button(axselectsignal, signal_types[type_selector])
 
 # The function to be called anytime a slider's value changes
 def update(val):
+    #get GUI values
     kpl = int(harmonic_slider.val)
     fade = fade_slider.val
-    alpha_shift = 2*np.pi*k*shift_slider.val/360
+    alpha_shift = 2*np.pi*shift_slider.val/360
+    alpha_harmonics = k*alpha_shift
+    t_shift = alpha_shift/(2*np.pi*f)
     para = para_slider.val
     show_harmonics = para_check.get_status()[0]
     show_harmonics_all = para_check.get_status()[1]
@@ -186,18 +207,23 @@ def update(val):
     if type_selector == 2:
         ak,bk = symmPulse(k,90*para)
         
-    #abs value (Amplitude)
+    #abs value (Amplitude) of each harmonic
     ck = np.sqrt(np.square(ak) + np.square(bk))     
-    Ck_RMS = ck/np.sqrt(2)
-    Ck_RMS[0] = ck[0]
     
-    #print(Ck_RMS)
+    #RMS value of each harmonic
+    Ck_RMS = ck/np.sqrt(2)
+    Ck_RMS[0] = ck[0]  #DC RMS
+    
+    #Total signal RMS
     sig_RMS = np.sqrt(np.sum(np.square(Ck_RMS)))
     
+    #DC, AC and harmonics RMS
+    dc_RMS = Ck_RMS[0]
+    ac_RMS = np.sqrt(np.sum(np.square(Ck_RMS[1:])))
     harmonics_RMS = np.sqrt(np.sum(np.square(Ck_RMS[2:])))
     #if DC: harmonics_RMS = np.sqrt(np.sum(np.square(Ck_RMS[1:])))
     
-    
+    #THD
     thd_r = np.nan
     rel_fund = np.nan
     thd_f = np.nan
@@ -212,30 +238,39 @@ def update(val):
         #THD, related to fundamental
         thd_f = harmonics_RMS/Ck_RMS[1]
         #if DC: rel_fund = harmonics_RMS/Ck_RMS[0]
+            
         
+    print("RMS: %05.2f, DC-RMS: %05.2f, AC-RMS: %05.2f" % (sig_RMS, dc_RMS, ac_RMS)  )
+    print("RMS of Harmonics: %05.2f, THDr: %05.4f, THDf: %05.4f, Relative Fund.: %05.4f" % (harmonics_RMS, thd_r, thd_f, rel_fund) )
     
-    
-    
-    print("RMS: %05.2f, RMS of Harmonics: %05.2f, THDr: %05.4f, THDf: %05.4f, Relative Fund.: %05.4f" % (sig_RMS, harmonics_RMS, thd_r, thd_f, rel_fund) )
-    
-    ak_shift =  np.cos(alpha_shift) * ak - np.sin(alpha_shift) * bk    
-    bk_shift =  np.sin(alpha_shift) * ak + np.cos(alpha_shift) * bk
+    #Shift in time -> rotate fourier coefficients
+    ak_shift =  np.cos(alpha_harmonics) * ak - np.sin(alpha_harmonics) * bk    
+    bk_shift =  np.sin(alpha_harmonics) * ak + np.cos(alpha_harmonics) * bk
 
+    #Calculate signal from fourier coefficients    
     [mt, mk] = np.meshgrid(t,k);
     [mt, mak] = np.meshgrid(t,ak_shift);
     [mt, mbk] = np.meshgrid(t,bk_shift);
 
-    #x_cos = mak * np.cos(2*np.pi*mk*f*mt)
-    #x_sin = mbk * np.sin(2*np.pi*mk*f*mt)
     sig_hrmc_k = mak * np.cos(2*np.pi*mk*f*mt) + mbk * np.sin(2*np.pi*mk*f*mt)
     sig_upto_hrmc_k = np.cumsum(sig_hrmc_k, axis=0);
+    
+    #calculate "real" signal
+    sig_real = rectangle_t(t-t_shift)
+    if type_selector == 1:
+        sig_real = pulse_t(t-t_shift,1*para)
+
+    if type_selector == 2:
+        sig_real = symmPulse_t(t-t_shift,90*para)
+    
+    
+    #Plotting
+    line_realsignal.set_ydata(sig_real);
     
     if (kpl >= 1):
         line_signal.set_ydata( (sig_upto_hrmc_k[kpl-1, :])*(1-fade) + (sig_upto_hrmc_k[kpl, : ])*fade   );
     else :
         line_signal.set_ydata( (sig_upto_hrmc_k[kpl, : ])*fade   );
-    #line_cos.set_ydata( (x_cos[kpl, : ])*fade   );
-    #line_sin.set_ydata( (x_sin[kpl, : ])*fade   );
 
     ak_fade = np.append(ak_shift[0:kpl], ak_shift[kpl]*fade);
     ak_fade = np.append(ak_fade, ak_shift[kpl+1:] * 0);    
@@ -244,7 +279,7 @@ def update(val):
     bk_fade = np.append(bk_fade, bk_shift[kpl+1:] * 0);
     
     ck_fade = np.append(ck[0:kpl], ck[kpl]*fade);
-    ck_fade = np.append(ck, ck[kpl+1:] * 0);
+    ck_fade = np.append(ck_fade, ck[kpl+1:] * 0);
     
     
     if show_harmonics :

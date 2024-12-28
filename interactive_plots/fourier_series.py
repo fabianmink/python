@@ -239,9 +239,7 @@ def update(val):
         thd_f = harmonics_RMS/Ck_RMS[1]
         #if DC: rel_fund = harmonics_RMS/Ck_RMS[0]
             
-        
-    print("RMS: %05.2f, DC-RMS: %05.2f, AC-RMS: %05.2f" % (sig_RMS, dc_RMS, ac_RMS)  )
-    print("RMS of Harmonics: %05.2f, THDr: %05.4f, THDf: %05.4f, Relative Fund.: %05.4f" % (harmonics_RMS, thd_r, thd_f, rel_fund) )
+
     
     #Shift in time -> rotate fourier coefficients
     ak_shift =  np.cos(alpha_harmonics) * ak - np.sin(alpha_harmonics) * bk    
@@ -262,9 +260,19 @@ def update(val):
 
     if type_selector == 2:
         sig_real = symmPulse_t(t-t_shift,90*para)
+        
+    #Printing results
+    print("RMS: %05.2f, DC-RMS: %05.2f, AC-RMS: %05.2f" % (sig_RMS, dc_RMS, ac_RMS)  )
+    print("RMS of Harmonics: %05.2f, THDr: %05.4f, THDf: %05.4f, Relative Fund.: %05.4f" % (harmonics_RMS, thd_r, thd_f, rel_fund) )
+    print ("+-----+--------+--------+-------+")
+    print ("|   k |   ak   |   bk   |  ck   |")
+    print ("+-----+--------+--------+-------+")
+    for ik in k:
+        print("| %3d | %+06.3f | %+06.3f | %05.3f |" % (ik, ak_shift[ik], bk_shift[ik], ck[ik] ))
+    print ("+-----+--------+--------+-------+")
+    print("")
     
-    
-    #Plotting
+    #Plotting results
     line_realsignal.set_ydata(sig_real);
     
     if (kpl >= 1):

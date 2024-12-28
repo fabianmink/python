@@ -112,9 +112,9 @@ ax_x.set_position([0.125,0.6,0.8,0.35])
 
 
 
-bar_coeff_cos = ax_bar.bar(k-0.2, 0*k.astype(np.float64), 0.2, color='red', label='cos'); 
-bar_coeff_sin = ax_bar.bar(k+0.2, 0*k.astype(np.float64), 0.2, color='blue', label='sin'); 
-bar_coeff_abs = ax_bar.bar(k,     0*k.astype(np.float64), 0.2, color='grey', label='abs'); 
+bar_coeff_cos = ax_bar.bar(k-0.2, 0*k.astype(np.float64), 0.2, color='red', label='$\hat{a}_k$'); 
+bar_coeff_sin = ax_bar.bar(k+0.2, 0*k.astype(np.float64), 0.2, color='blue', label='$\hat{b}_k$'); 
+bar_coeff_abs = ax_bar.bar(k,     0*k.astype(np.float64), 0.2, color='grey', label='$\hat{c}_k$ (abs)'); 
 ax_bar.set_axisbelow(True)
 ax_bar.grid(1)
 ax_bar.legend()  

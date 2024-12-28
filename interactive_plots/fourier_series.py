@@ -264,13 +264,15 @@ def update(val):
     #Printing results
     print("RMS: %05.2f, DC-RMS: %05.2f, AC-RMS: %05.2f" % (sig_RMS, dc_RMS, ac_RMS)  )
     print("RMS of Harmonics: %05.2f, THDr: %05.4f, THDf: %05.4f, Relative Fund.: %05.4f" % (harmonics_RMS, thd_r, thd_f, rel_fund) )
-    print ("+-----+--------+--------+-------+")
-    print ("|   k |   ak   |   bk   |  ck   |")
-    print ("+-----+--------+--------+-------+")
+    print ("+-----+--------+--------+-------+-------+-------+-------+-------+")
+    print ("|   k |   ak   |   bk   |  ck   | Ck_RMS| Σ RMS |  Σ AC |Σ Harm.|")
+    print ("+-----+--------+--------+-------+-------+-------+-------+-------+")
     for ik in k:
-        print("| %3d | %+06.3f | %+06.3f | %05.3f |" % (ik, ak_shift[ik], bk_shift[ik], ck[ik] ))
-    print ("+-----+--------+--------+-------+")
+        print("| %3d | %+06.3f | %+06.3f | %05.3f | %05.3f | %05.3f | %05.3f | %05.3f |" % (ik, ak_shift[ik], bk_shift[ik], ck[ik], Ck_RMS[ik], np.sqrt(np.sum(np.square(Ck_RMS[:ik+1]))), np.sqrt(np.sum(np.square(Ck_RMS[1:ik+1]))), np.sqrt(np.sum(np.square(Ck_RMS[2:ik+1])))   )  )
+    print ("+-----+--------+--------+-------+-------+-------+-------+-------+")
     print("")
+    
+    #
     
     #Plotting results
     line_realsignal.set_ydata(sig_real);

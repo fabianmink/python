@@ -65,9 +65,9 @@ uc = A*np.sin(2*np.pi*f*t-4*np.pi/3);
 
 ualpha, ubeta = clarke(ua, ub, uc);
 
-line_a, = ax_t.plot(t* 1000, ua, 'r-', linewidth=1, label='$u_\mathrm{a}$');
-line_b, = ax_t.plot(t* 1000, ub, 'g-', linewidth=1, label='$u_\mathrm{b}$');
-line_c, = ax_t.plot(t* 1000, uc, 'b-', linewidth=1, label='$u_\mathrm{c}$');
+line_a, = ax_t.plot(t* 1000, ua, 'r-', linewidth=1, label='$u_\mathrm{L1}$');
+line_b, = ax_t.plot(t* 1000, ub, 'g-', linewidth=1, label='$u_\mathrm{L2}$');
+line_c, = ax_t.plot(t* 1000, uc, 'b-', linewidth=1, label='$u_\mathrm{L3}$');
 
 line_pos_t, = ax_t.plot( tcur*np.array([1, 1]) * 1000, np.array([-400, 400]), 'k-', linewidth=1)
 

@@ -24,7 +24,8 @@
 #
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.widgets import Button, Slider, CheckButtons
+from matplotlib.widgets import Slider, CheckButtons
+#import sys
 
 
 U_DC = 500.0  #V
@@ -98,10 +99,15 @@ ax_sv.axis('equal')
 
 ax_sv.set_xlabel(r"$u_{\alpha}  /  \mathrm{V}$")
 ax_sv.set_ylabel(r"$u_{\beta}  /  \mathrm{V}$")
-line_sv, = ax_sv.plot( ualpha, ubeta, 'mx-', linewidth=0.5)
+line_sv, = ax_sv.plot( ualpha, ubeta, 'kx--', linewidth=0.5)
 #line_sv_mavg, = ax_sv.plot( 0, 0, 'b-', linewidth=1)
 arrow_sv = ax_sv.arrow(0,0,0,0,width=5,head_width=20,head_length=50,length_includes_head=True,ec='black',fc='black')
 arrow_sv_zero, = ax_sv.plot( 0, 0, 'ko', linewidth=2, markersize=10)
+
+arrow_sva = ax_sv.arrow(-U_DC,0,U_DC*2,0,width=1,head_width=20,head_length=50,length_includes_head=True,ec='red',fc='red')
+arrow_svb = ax_sv.arrow(U_DC/2,-U_DC*0.866,-U_DC/2*2,U_DC*0.866*2,width=1,head_width=20,head_length=50,length_includes_head=True,ec='green',fc='green')
+arrow_svc = ax_sv.arrow(U_DC/2,U_DC*0.866,-U_DC/2*2,-U_DC*0.866*2,width=1,head_width=20,head_length=50,length_includes_head=True,ec='blue',fc='blue')
+
 
 
 line_sref, = ax_ref.plot( t*1000, sref, 'k', linewidth=1, label='$s_\mathrm{ref}$')
@@ -289,7 +295,18 @@ def visibility_upd(val):
     fig_t.canvas.draw_idle()
        
 
+def on_close(event):
+    #print('Closed Figure!')
     
+    plt.close('all')
+    #sys.exit()
+    
+
+fig_t.canvas.mpl_connect('close_event', on_close)
+fig_sv.canvas.mpl_connect('close_event', on_close)
+fig_widgets.canvas.mpl_connect('close_event', on_close)
+
+   
 
 # register the update functions for each widget
 tpos_slider.on_changed(tpos_slider_upd)

@@ -131,7 +131,7 @@ line_loc_u1_r4, = ax_phasor.plot(0*r4_loc, 0*r4_loc, 'k-' ,linewidth=0.5);
 line_loc_u3_r2, = ax_phasor.plot(0*r2_loc, 0*r2_loc, 'k-', linewidth=0.5);
 line_loc_u3_r4, = ax_phasor.plot(0*r4_loc, 0*r4_loc, 'k-' ,linewidth=0.5);
 
-arrow_ubr = ax_phasor.arrow(0,0,0,0,width=line_width,head_width=head_width,head_length=head_length,length_includes_head=True,ec='yellow',fc='yellow')
+arrow_ubr = ax_phasor.arrow(0,0,0,0,width=line_width,head_width=head_width,head_length=head_length,length_includes_head=True,ec='orange',fc='orange')
 
 arrow_u1 = ax_phasor.arrow(0,0,0,0,width=line_width,head_width=head_width,head_length=head_length,length_includes_head=True,ec='green',fc='green')
 arrow_u2 = ax_phasor.arrow(0,0,0,0,width=line_width,head_width=head_width,head_length=head_length,length_includes_head=True,ec='green',fc='green')
@@ -158,6 +158,7 @@ annotate_u2 = ax_phasor.annotate(r"$\hat{u}_\mathrm{2}$", xy=(0, 0), xycoords='d
 annotate_u3 = ax_phasor.annotate(r"$\hat{u}_\mathrm{3}$", xy=(0, 0), xycoords='data', fontsize=12, color='blue')
 annotate_u4 = ax_phasor.annotate(r"$\hat{u}_\mathrm{4}$", xy=(0, 0), xycoords='data', fontsize=12, color='blue')
 annotate_ud = ax_phasor.annotate(r"$\hat{u}_\mathrm{d}$", xy=(0, 0), xycoords='data', fontsize=12, color='red')
+annotate_ubr = ax_phasor.annotate(r"$\hat{u}_\mathrm{br}$", xy=(0, 0), xycoords='data', fontsize=12, color='orange')
 annotate_i0 = ax_phasor.annotate(r"$\hat{i}_0$", xy=(0, 0), xycoords='data', fontsize=12, color='grey')
 annotate_i12 = ax_phasor.annotate(r"$\hat{i}_{12}$", xy=(0, 0), xycoords='data', fontsize=12, color='green')
 annotate_i34 = ax_phasor.annotate(r"$\hat{i}_{34}$", xy=(0, 0), xycoords='data', fontsize=12, color='blue')
@@ -193,6 +194,7 @@ def update_phasors():
     annotate_u3.set(  x=(u0.real+u3.real/2)/scaleu + 0,   y=(u0.imag+u3.imag/2)/scaleu-0.6  )
     annotate_u4.set(  x=(u0.real+u3.real+u4.real/2)/scaleu + 0,   y=(u0.imag+u3.imag+u4.imag/2)/scaleu+0.2  )
     annotate_ud.set(  x=(u0.real+u1.real+ud.real/2)/scaleu + 0,   y=(u0.imag+u1.imag+ud.imag/2)/scaleu+0.2  )
+    annotate_ubr.set(  x=(u0.real+uBr.real/2)/scaleu + 0,   y=(u0.imag+uBr.imag/2)/scaleu+0.2  )
     annotate_i0.set(  x=i0.real/2/scalei - 0.4,   y=i0.imag/2/scalei - 0.8  )
     annotate_i12.set(  x=i12.real/2/scalei - 0.4,   y=i12.imag/2/scalei - 0.6  )
     annotate_i34.set(  x=(i12.real+i34.real/2)/scalei -0.2,   y=(i12.imag+i34.imag/2)/scalei - 0.8  )

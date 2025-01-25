@@ -24,7 +24,7 @@
 #
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.widgets import Slider, CheckButtons
+from matplotlib.widgets import Slider
 import drawPaper as dp
 
 scaleu = 1;
@@ -121,14 +121,7 @@ def clarke(a,b,c):
 
 
 fig_phasor, (ax_phasor) = plt.subplots(1, 1)
-
-#plt.autoscale(False)
 ax_phasor.autoscale(False)
-
-#ax_phasor.grid(1)
-#ax_phasor.set(xlim=(-5, 20), ylim=(-5, 20))
-#redo after each update
-ax_phasor.axis('equal')
 
 ax_phasor.set_xlabel(r"$\mathrm{Re}$")
 ax_phasor.set_ylabel(r"$\mathrm{Im}$")
@@ -180,62 +173,22 @@ dp.drawPaper(fig_phasor, **myDim);
 
 #todo: do all impedance / phasor calculations here
 def update_phasors():
-    w = 2*np.pi*f;
-    
-    XL0 = w*L0;
-    XL1 = w*L1;
-    
-    XC4 = -1/(w*C4);
-    
-    Z0 = R0 + 1j*XL0 + RL0;
-    
-    Z1 = RL1 + 1j*XL1;
-    Z2 = R2;
-    Z3 = R3;
-    Z4 = 1/( 1/R4 + 1/(1j*XC4) ); 
-    
-    Z12 = Z1 + Z2;
-    Z34 = Z3 + Z4;
-    
-    ZBr = Z12*Z34/(Z12+Z34);
-    
-    Zges = Z0 + ZBr;
-    
-    i0 = u/Zges;
-    
-    u0 = i0*Z0;
-    uBr = u - u0;
-    
-    i12 = uBr/Z12;
-    i34 = uBr/Z34;
-    
-    u1 = i12*Z1;
-    u2 = i12*Z2;
-    
-    u3 = i34*Z3;
-    u4 = i34*Z4;
-    
-    ud = u2-u4;
+    u0,u1,u2,u3,u4,uBr,ud,i0,i12,i34 = phasors(R2, R4)
     
     arrow_u.set_data(x=0, y=0, dx=u.real/scaleu,dy=u.imag/scaleu)
-       
-    
     arrow_u0.set_data(x=0, y=0, dx=u0.real/scaleu,dy=u0.imag/scaleu)
     
     arrow_ubr.set_data(x=u0.real/scaleu, y=u0.imag/scaleu, dx=uBr.real/scaleu,dy=uBr.imag/scaleu)
     
     arrow_u1.set_data(x=u0.real/scaleu, y=u0.imag/scaleu, dx=u1.real/scaleu,dy=u1.imag/scaleu)
     arrow_u2.set_data(x=(u0.real+u1.real)/scaleu, y=(u0.imag+u1.imag)/scaleu, dx=u2.real/scaleu,dy=u2.imag/scaleu)
-    
     arrow_u3.set_data(x=u0.real/scaleu, y=u0.imag/scaleu, dx=u3.real/scaleu,dy=u3.imag/scaleu)
     arrow_u4.set_data(x=(u0.real+u3.real)/scaleu, y=(u0.imag+u3.imag)/scaleu, dx=u4.real/scaleu,dy=u4.imag/scaleu)
     
     arrow_ud.set_data(x=(u0.real+u1.real)/scaleu, y=(u0.imag+u1.imag)/scaleu, dx=ud.real/scaleu,dy=ud.imag/scaleu)
     arrow_ud2.set_data(x=0, y=0, dx=ud.real/scaleu,dy=ud.imag/scaleu)
-    
        
     arrow_i0.set_data(x=0, y=0, dx=i0.real/scalei,dy=i0.imag/scalei)
-    
     arrow_i12.set_data(x=0, y=0, dx=i12.real/scalei,dy=i12.imag/scalei)
     arrow_i34.set_data(x=i12.real/scalei, y=i12.imag/scalei, dx=i34.real/scalei,dy=i34.imag/scalei)
     
@@ -271,13 +224,7 @@ def update_phasors():
     line_loc_u3_r4.set_xdata((u0_r4+u3_r4).real/scaleu  );
     line_loc_u3_r4.set_ydata((u0_r4+u3_r4).imag/scaleu  );
     
-    #line_sv_mavg.set_data(ualpha_mavg_tpos,ubeta_mavg_tpos)
-    
-    #print(tcur)
-    
- 
- 
-  
+      
 
 fig_widgets = plt.figure()
 
@@ -285,7 +232,6 @@ ax_f = fig_widgets.add_axes([0.075, 0.4, 0.8, 0.03])
 f_slider = Slider(
     ax=ax_f,
     label=r'$f/\mathrm{Hz}$',
-    #label='position',
     valmin=100,
     valmax=1000,
     valinit=500,
@@ -296,7 +242,6 @@ ax_R2 = fig_widgets.add_axes([0.075, 0.2, 0.8, 0.03])
 R2_slider = Slider(
     ax=ax_R2,
     label=r'$R_\mathrm{2}$',
-    #label='position',
     valmin=15,
     valmax=40,
     valinit=R2,
@@ -307,7 +252,6 @@ ax_R4 = fig_widgets.add_axes([0.075, 0.1, 0.8, 0.03])
 R4_slider = Slider(
     ax=ax_R4,
     label=r'$R_\mathrm{4}$',
-    #label='position',
     valmin=30.0,
     valmax=55.0,
     valinit=R4,
@@ -322,9 +266,7 @@ def slider_upd(val):
     R2 = R2_slider.val
     R4 = R4_slider.val
     
-    
     update_phasors()
-    #ax_phasor.axis('equal')
    
     fig_phasor.canvas.draw_idle()
     
@@ -348,10 +290,7 @@ R4_slider.on_changed(slider_upd)
 
 
 #initial update
-#ax_phasor.autoscale(False)
 slider_upd(0)
-
-
 
 
 plt.show()

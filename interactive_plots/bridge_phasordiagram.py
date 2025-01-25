@@ -40,8 +40,6 @@ f = 500;
 R0 = 2.2;
 L0 = 1e-3;
 RL0 = 1.3;
-
-
 L1 = 10e-3;
 RL1 = 11;
 R2 = 33;
@@ -113,12 +111,6 @@ def phasors(R2, R4):
     return (u0,u1,u2,u3,u4,uBr,ud,i0,i12,i34)
     
 
-def clarke(a,b,c):
-    alpha = 2/3*a - 1/3*b -1/3*c
-    beta = 1/np.sqrt(3)*b - 1/np.sqrt(3)*c
-    return alpha,beta
-
-
 
 fig_phasor, (ax_phasor) = plt.subplots(1, 1)
 ax_phasor.autoscale(False)
@@ -156,6 +148,8 @@ arrow_i12 = ax_phasor.arrow(0,0,0,0,width=line_width,head_width=head_width,head_
 arrow_i34 = ax_phasor.arrow(0,0,0,0,width=line_width,head_width=head_width,head_length=head_length,length_includes_head=True,ec='blue',fc='blue')
 
 arrow_i0 = ax_phasor.arrow(0,0,0,0,width=line_width,head_width=head_width,head_length=head_length,length_includes_head=True,ec='grey',fc='grey')
+
+annotate_ud_val = ax_phasor.annotate(r"$u_\mathrm{d}$ = " , xy=(5.5, 5), xycoords='data', bbox=dict(boxstyle="round", fc="0.8"))
 
 annotate_u = ax_phasor.annotate(r"$\hat{u}$", xy=(0, 0), xycoords='data', fontsize=12, color='magenta')
 annotate_u0 = ax_phasor.annotate(r"$\hat{u}_0$", xy=(0, 0), xycoords='data', fontsize=12)
@@ -202,6 +196,9 @@ def update_phasors():
     annotate_i0.set(  x=i0.real/2/scalei - 0.4,   y=i0.imag/2/scalei - 0.8  )
     annotate_i12.set(  x=i12.real/2/scalei - 0.4,   y=i12.imag/2/scalei - 0.6  )
     annotate_i34.set(  x=(i12.real+i34.real/2)/scalei -0.2,   y=(i12.imag+i34.imag/2)/scalei - 0.8  )
+    
+    #
+    annotate_ud_val.set( text = r"$u_\mathrm{d} = " + ("%6.3f" % (np.abs(ud)))  + r"\mathrm{V}$")
     
     u0_r2,u1_r2,u2_r2,u3_r2,u4_r2,uBr_r2,ud_r2,i0_r2,i12_r2,i34_r2 = phasors(r2_loc,R4)
     u0_r4,u1_r4,u2_r4,u3_r4,u4_r4,uBr_r4,ud_r4,i0_r4,i12_r4,i34_r4 = phasors(R2,r4_loc)

@@ -83,8 +83,12 @@ fig, (ax_u, ax_q) = plt.subplots(2, 1)
 line_uint, = ax_u.plot(t*1000, np.zeros(numsteps), 'bx-', lw=1)
 line_udelta, = ax_u.step(t*1000, np.zeros(numsteps), 'g-', lw=1, where='post')
 line_ue, = ax_u.step(t*1000, np.zeros(numsteps), 'r-', lw=1, where='post')
+line_urefp, = ax_u.plot(t*1000, np.ones(numsteps)*Uref, 'k--', lw=1)
+line_urefn, = ax_u.plot(t*1000, np.ones(numsteps)*-Uref, 'k--', lw=1)
+
 line_q, = ax_q.plot(t*1000, np.zeros(numsteps), 'ko', fillstyle='none', lw=1)
 #line_q, = ax_q.step(t*1000, np.zeros(numsteps), 'rx-', lw=1, where='post')
+
 
 
     

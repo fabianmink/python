@@ -63,8 +63,8 @@ myDim = {
          'y_scale': 1,
          'x_cm' : 13,
          'y_cm' : 11,
-         'x_label' : '$\mathrm{Re}$',
-         'y_label' : '$\mathrm{Im}$',
+         'x_label' : r'$\mathrm{Re}$',
+         'y_label' : r'$\mathrm{Im}$',
          'x_cm_tick' : 0,
          'y_cm_tick' : 0,
 }
@@ -120,7 +120,7 @@ ax_phasor.set_ylabel(r"$\mathrm{Im}$")
 
 arrow_u0 = ax_phasor.arrow(0,0,0,0,width=line_width,head_width=head_width,head_length=head_length,length_includes_head=True,ec='black',fc='black')
 
-ax_phasor.annotate(r"$1\mathrm{V}/ \mathrm{cm}$" + "\n" + "$50\mathrm{mA}/ \mathrm{cm}$", xy=(1.5, 5), xycoords='data', bbox=dict(boxstyle="round", fc="0.8"))
+ax_phasor.annotate(r"$1\mathrm{V}/ \mathrm{cm}$" + "\n" + r"$50\mathrm{mA}/ \mathrm{cm}$", xy=(1.5, 5), xycoords='data', bbox=dict(boxstyle="round", fc="0.8"))
 
 line_loc_ud_r2, = ax_phasor.plot(0*r2_loc, 0*r2_loc, 'k-', linewidth=0.5);
 line_loc_ud_r4, = ax_phasor.plot(0*r4_loc, 0*r4_loc, 'k-' ,linewidth=0.5);

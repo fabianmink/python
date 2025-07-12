@@ -88,8 +88,8 @@ ax_uA.set(xlim=(t[0]*1000, t[-1]*1000))
 ax_uA.set_xticklabels([])
 
 ax_uM.grid(1)
-ax_uM.set_xlabel("$t  /  \mathrm{ms}$")
-ax_uM.set_ylabel("$u/V$")
+ax_uM.set_xlabel(r"$t  /  \mathrm{ms}$")
+ax_uM.set_ylabel(r"$u/V$")
 ax_uM.set(xlim=(t[0]*1000, t[-1]*1000))
 
 fig_sv, (ax_sv) = plt.subplots(1, 1)
@@ -110,23 +110,23 @@ arrow_svc = ax_sv.arrow(U_DC/2,U_DC*0.866,-U_DC/2*2,-U_DC*0.866*2,width=1,head_w
 
 
 
-line_sref, = ax_ref.plot( t*1000, sref, 'k', linewidth=1, label='$s_\mathrm{ref}$')
-line_sa, = ax_ref.plot( t*1000, t*0, 'r', linewidth=1, label='$s_\mathrm{a}$')
-line_sb, = ax_ref.plot( t*1000, t*0, 'g', linewidth=1, label='$s_\mathrm{b}$')
-line_sc, = ax_ref.plot( t*1000, t*0, 'b', linewidth=1, label='$s_\mathrm{c}$')
+line_sref, = ax_ref.plot( t*1000, sref, 'k', linewidth=1, label=r'$s_\mathrm{ref}$')
+line_sa, = ax_ref.plot( t*1000, t*0, 'r', linewidth=1, label=r'$s_\mathrm{a}$')
+line_sb, = ax_ref.plot( t*1000, t*0, 'g', linewidth=1, label=r'$s_\mathrm{b}$')
+line_sc, = ax_ref.plot( t*1000, t*0, 'b', linewidth=1, label=r'$s_\mathrm{c}$')
 line_s_tpos, = ax_ref.plot( 0*np.array([1, 1]) * 1000, np.array([-1, 1]), 'k-', linewidth=2)
 
 
-line_uAa, = ax_uA.plot( t*1000, t*0, 'r', linewidth=1, label='$u_\mathrm{Aa}$')
-line_uAb, = ax_uA.plot( t*1000, t*0, 'g', linewidth=1, label='$u_\mathrm{Ab}$')
-line_uAc, = ax_uA.plot( t*1000, t*0, 'b', linewidth=1, label='$u_\mathrm{Ac}$')
+line_uAa, = ax_uA.plot( t*1000, t*0, 'r', linewidth=1, label=r'$u_\mathrm{Aa}$')
+line_uAb, = ax_uA.plot( t*1000, t*0, 'g', linewidth=1, label=r'$u_\mathrm{Ab}$')
+line_uAc, = ax_uA.plot( t*1000, t*0, 'b', linewidth=1, label=r'$u_\mathrm{Ac}$')
 line_uA_tpos, = ax_uA.plot( 0*np.array([1, 1]) * 1000, np.array([-1, 1]) * U_DC/2, 'k-', linewidth=2)
 
 
-line_uaM, = ax_uM.plot( t*1000, t*0, 'r', linewidth=1, label='$u_\mathrm{aM}$')
-line_ubM, = ax_uM.plot( t*1000, t*0, 'g', linewidth=1, label='$u_\mathrm{bM}$')
-line_ucM, = ax_uM.plot( t*1000, t*0, 'b', linewidth=1, label='$u_\mathrm{cM}$')
-line_uM,  = ax_uM.plot( t*1000, t*0, 'k', linewidth=1, label='$u_\mathrm{M0}$')
+line_uaM, = ax_uM.plot( t*1000, t*0, 'r', linewidth=1, label=r'$u_\mathrm{aM}$')
+line_ubM, = ax_uM.plot( t*1000, t*0, 'g', linewidth=1, label=r'$u_\mathrm{bM}$')
+line_ucM, = ax_uM.plot( t*1000, t*0, 'b', linewidth=1, label=r'$u_\mathrm{cM}$')
+line_uM,  = ax_uM.plot( t*1000, t*0, 'k', linewidth=1, label=r'$u_\mathrm{M0}$')
 line_uM_tpos, = ax_uM.plot( 0*np.array([1, 1]) * 1000, np.array([-1, 1]) * 2*U_DC/3, 'k-', linewidth=2)
 
 ax_ref.legend(loc='upper right') 

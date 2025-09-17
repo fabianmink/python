@@ -35,8 +35,8 @@ myDim = {'x_cm_min' : 1.375,
          'y_scale': 0.25,
          'x_cm' : 16,
          'y_cm' : 11,
-         'x_label' : '$t/\mathrm{s}$',
-         'y_label' : '$u_\mathrm{x}/\mathrm{V}$'
+         'x_label' : r'$t/\mathrm{s}$',
+         'y_label' : r'$u_\mathrm{x}/\mathrm{V}$'
 }
 
 

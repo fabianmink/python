@@ -12,13 +12,13 @@ class WebServerHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
         query = urllib.parse.parse_qs(parsed_path.query)
-       
+        
         message = '\n'.join([
             'CLIENT VALUES:',
             'client_address=%s (%s)' % (self.client_address,
                 self.address_string()),
             'command=%s' % self.command,
-            #'path=%s' % self.path,
+            'path=%s' % self.path,
             'real path=%s' % parsed_path.path,
             'query=%s' % parsed_path.query,
             'request_version=%s' % self.request_version,
@@ -30,12 +30,18 @@ class WebServerHandler(BaseHTTPRequestHandler):
             '',
             'decoded query string=%s' % str(query),
             ])
-        #print(message)
+        
+        print(message)
         #print(query)
         
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(message.encode('utf-8'))
+        if( (parsed_path.path == '/') or (parsed_path.path == '/test.txt') ) :
+            self.send_response(200)
+            self.send_header('Content-type','text/plain')
+            self.end_headers()
+            self.wfile.write(message.encode('utf-8'))
+            return
+        
+        self.send_error(404,'File Not Found: %s' % parsed_path.path)
 
 def main():
     try:

@@ -132,7 +132,7 @@ def drawPaper(fh="none", **kwargs):
     axTicksy.patch.set_alpha(0)
     
     if x_cm_tick > 0:
-        x_tick_range = (math.floor(x_cm_min-x_cm_zero)*x_cm_tick*x_scale, (math.ceil(x_cm_max-x_cm_zero)+0.1)*x_cm_tick*x_scale) 
+        x_tick_range = (math.floor(x_cm_min-x_cm_zero)*1*x_scale, (math.ceil(x_cm_max-x_cm_zero)+0.1)*1*x_scale) 
         axTicksx.xaxis.set_ticks(np.arange(x_tick_range[0], x_tick_range[1], x_cm_tick*x_scale))
     else:
         axTicksx.xaxis.set_ticks(np.array([]))
@@ -141,7 +141,7 @@ def drawPaper(fh="none", **kwargs):
     
     axTicksy.xaxis.set_ticks(np.array([]))
     if y_cm_tick > 0:
-        y_tick_range = (math.floor(y_cm_min-y_cm_zero)*y_cm_tick*y_scale, (math.ceil(y_cm_max-y_cm_zero)+0.1)*y_cm_tick*y_scale)
+        y_tick_range = (math.floor(y_cm_min-y_cm_zero)*1*y_scale, (math.ceil(y_cm_max-y_cm_zero)+0.1)*1*y_scale)
         axTicksy.yaxis.set_ticks(np.arange(y_tick_range[0], y_tick_range[1], y_cm_tick*y_scale))
     else:
         axTicksy.yaxis.set_ticks(np.array([]))

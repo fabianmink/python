@@ -82,6 +82,10 @@ def drawPaper(fh="none", **kwargs):
     y_label = kwargs.get('y_label', '$y$')
     
     
+    #position of "0"-Point
+    fg_axes = kwargs.get('fg_axes',False)
+    
+    
     #x_tickres = x_scale  #default
     
     
@@ -103,12 +107,17 @@ def drawPaper(fh="none", **kwargs):
     
     #axes for grid to background
     axGrid = fh.add_axes([0,0,1,1])
-    axGrid.zorder = -2;
     axGrid.xaxis.set_ticks(np.arange(0, x_cm, x_res))
     axGrid.yaxis.set_ticks(np.arange(0, y_cm, y_res))
     axGrid.axes.set_xlim((0, x_cm)) 
     axGrid.axes.set_ylim((0, y_cm))
     axGrid.axes.grid(axis='both', linewidth=0.5, color = 'lightgrey')
+    #axGrid.axes.grid(axis='both', linewidth=0.5, color = 'darkgrey')
+    axGrid.zorder = -2
+    if fg_axes:
+        axGrid.patch.set_alpha(0)
+        axGrid.zorder = 0
+        
     axGrid.set_axisbelow(True)
     plt.arrow(x_cm_min,y_cm_orig,(x_cm_max+0.2-x_cm_min),0,width=0.02,head_width=0.2,head_length=0.3,length_includes_head=False,fc='black')
     plt.arrow(x_cm_orig,y_cm_min,0,(y_cm_max+0.2-y_cm_min),width=0.02,head_width=0.2,head_length=0.3,length_includes_head=False,fc='black')
@@ -132,7 +141,7 @@ def drawPaper(fh="none", **kwargs):
     axTicksy.patch.set_alpha(0)
     
     if x_cm_tick > 0:
-        x_tick_range = (math.floor(x_cm_min-x_cm_zero)*1*x_scale, (math.ceil(x_cm_max-x_cm_zero)+0.1)*1*x_scale) 
+        x_tick_range = (math.floor(x_cm_min-x_cm_zero)*x_cm_tick*x_scale, (math.ceil(x_cm_max-x_cm_zero)+0.1)*x_cm_tick*x_scale) 
         axTicksx.xaxis.set_ticks(np.arange(x_tick_range[0], x_tick_range[1], x_cm_tick*x_scale))
     else:
         axTicksx.xaxis.set_ticks(np.array([]))
@@ -141,7 +150,7 @@ def drawPaper(fh="none", **kwargs):
     
     axTicksy.xaxis.set_ticks(np.array([]))
     if y_cm_tick > 0:
-        y_tick_range = (math.floor(y_cm_min-y_cm_zero)*1*y_scale, (math.ceil(y_cm_max-y_cm_zero)+0.1)*1*y_scale)
+        y_tick_range = (math.floor(y_cm_min-y_cm_zero)*y_cm_tick*y_scale, (math.ceil(y_cm_max-y_cm_zero)+0.1)*y_cm_tick*y_scale)
         axTicksy.yaxis.set_ticks(np.arange(y_tick_range[0], y_tick_range[1], y_cm_tick*y_scale))
     else:
         axTicksy.yaxis.set_ticks(np.array([]))

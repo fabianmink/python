@@ -29,7 +29,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import drawPaper as dp
-
+import csv
 
 #FB, Kaiserstraße Ecke Ockstädter Straße
 pos0_lat = 50.33405
@@ -38,6 +38,28 @@ pos0_lon = 8.75242
 #FB THM A2.0.09
 home_lat = 50.32990
 home_lon = 8.75939
+
+#Optional: Get data from file
+with open('gnss_data.csv') as csv_file:
+    home_lat = []
+    home_lon = []
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    line_count = 0
+    for row in csv_reader:
+        if line_count == 0:
+            print(f'Column names are {", ".join(row)}')
+            line_count += 1
+        else:
+            #print(f'\t{row[0]} works in the {row[1]} department, and was born in {row[2]}.')
+            home_lat.append(float(row[1]))
+            home_lon.append(float(row[2]))
+            line_count += 1
+            
+    
+    home_lat = np.array(home_lat)
+    home_lon = np.array(home_lon)
+
+
 
 delta_phi_lat = (home_lat - pos0_lat)/ 360 * 2*np.pi 
 delta_phi_lon = (home_lon - pos0_lon)/ 360 * 2*np.pi * np.cos(pos0_lat/ 360 * 2*np.pi)
@@ -74,7 +96,7 @@ myDim = {'x_cm_min' : 0.8,
 }
 
 
-plt.plot(delta_x, delta_y, 'rx', lw=1, zorder = 100)
+plt.plot(delta_x, delta_y, 'rx-', lw=1, zorder = 100)
 
 fig = plt.gcf()
 dp.drawPaper(fig, **myDim);

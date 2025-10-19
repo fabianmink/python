@@ -30,11 +30,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import drawPaper as dp
 
-pos0_lat = 50.33405201368627
-pos0_lon = 8.752422649964268
 
-home_lat = 50.3299013596345
-home_lon = 8.759395926306713
+#FB, Kaiserstraße Ecke Ockstädter Straße
+pos0_lat = 50.33405
+pos0_lon = 8.75242
+
+#FB THM A2.0.09
+home_lat = 50.32990
+home_lon = 8.75939
 
 delta_phi_lat = (home_lat - pos0_lat)/ 360 * 2*np.pi 
 delta_phi_lon = (home_lon - pos0_lon)/ 360 * 2*np.pi * np.cos(pos0_lat/ 360 * 2*np.pi)

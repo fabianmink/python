@@ -86,6 +86,7 @@ posz_s = posz + dz_dtheta * DTHETA + dz_dphi * DPHI
 central_point=[0.,0.,0.]
 
 ax = plt.figure().add_subplot(projection='3d')
+ax.view_init(elev=20, azim=-15, roll=0)
 
 #fig = plt.figure()
 #ax = fig.gca(projection='3d')
@@ -106,7 +107,9 @@ ax.quiver(posx, posy, posz, dx_dtheta*delta_theta, dy_dtheta*delta_theta, dz_dth
 
 #ax.plot(posx_s, posy_s, posz_s, 'gx-')
 
-ax.set_xlabel(r"$x$")
-ax.set_ylabel(r"$y$")
-ax.set_zlabel(r"$z$")
+ax.set_xlabel(r"$x / \mathrm{km}$")
+ax.set_ylabel(r"$y / \mathrm{km}$")
+ax.set_zlabel(r"$z / \mathrm{km}$")
+
+plt.savefig("earth.png", dpi=300)
 

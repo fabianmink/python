@@ -58,8 +58,8 @@ with open('output_2025-10-19_14-23-55.log', 'rb') as stream:
     
     if(parsed_data.identity == 'GNRMC'):
         msg_GNRMC = parsed_data
-        thislat = msg_GNRMC.lat
-        thislon = msg_GNRMC.lon
+        thislat = msg_GNRMC.lat + offs_lat
+        thislon = msg_GNRMC.lon + offs_lon
         lat.append(thislat)
         lon.append(thislon)
         thisdatetime = dt.datetime.combine(msg_GNRMC.date, msg_GNRMC.time)
@@ -73,10 +73,6 @@ with open('output_2025-10-19_14-23-55.log', 'rb') as stream:
 
 lat = np.array(lat)
 lon = np.array(lon)
-
-lat = lat + offs_lat
-lon = lon + offs_lon
-
 
 m_lat = np.mean(lat)
 m_lon = np.mean(lon)

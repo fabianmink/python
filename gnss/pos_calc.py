@@ -45,8 +45,8 @@ myDim = {'x_cm_min' : 0.8,
          'y_scale': 100,
          'x_cm' : 16,
          'y_cm' : 18,
-         'x_label' : '$x / \mathrm{m}$',
-         'y_label' : '$y / \mathrm{m}$',
+         'x_label' : r'$x / \mathrm{m}$',
+         'y_label' : r'$y / \mathrm{m}$',
          'fg_axes' : True,
 }
 

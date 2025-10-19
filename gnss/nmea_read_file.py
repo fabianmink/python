@@ -25,15 +25,31 @@
 #   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-lat = []
-lon = []
-time = []
-t_since_start = [0]
-
 import numpy as np
 import matplotlib.pyplot as plt
 from pynmeagps import NMEAReader
 import datetime as dt
+import csv
+
+
+lat = []
+lon = []
+time = []
+t_since_start = []
+
+
+csvfile = open('gnss_data.csv', 'w', newline='')
+
+fieldnames = ['time', 'lat', 'lon']
+writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+writer.writeheader()
+
+#pos correction
+#offs_lat = -0.07060
+#offs_lon =  0.12995
+offs_lat = 0
+offs_lon = 0
 
 with open('output_2025-10-19_14-23-55.log', 'rb') as stream:
   nmr = NMEAReader(stream, nmeaonly=True)
@@ -42,16 +58,25 @@ with open('output_2025-10-19_14-23-55.log', 'rb') as stream:
     
     if(parsed_data.identity == 'GNRMC'):
         msg_GNRMC = parsed_data
-        lat.append(msg_GNRMC.lat)
-        lon.append(msg_GNRMC.lon)
-        datetime = dt.datetime.combine(msg_GNRMC.date, msg_GNRMC.time)
-        time.append(datetime)
-        delta = datetime - time[0];
+        thislat = msg_GNRMC.lat
+        thislon = msg_GNRMC.lon
+        lat.append(thislat)
+        lon.append(thislon)
+        thisdatetime = dt.datetime.combine(msg_GNRMC.date, msg_GNRMC.time)
+        time.append(thisdatetime)
+        
+        delta = thisdatetime - time[0];
         t_since_start.append( delta.total_seconds())
+        
+        writer.writerow({'time': thisdatetime.isoformat(), 'lat': thislat, 'lon': thislon})
         
 
 lat = np.array(lat)
 lon = np.array(lon)
+
+lat = lat + offs_lat
+lon = lon + offs_lon
+
 
 m_lat = np.mean(lat)
 m_lon = np.mean(lon)
@@ -64,6 +89,7 @@ n_bins = 20
 axs[1].hist(lat-m_lat, bins=n_bins)
 axs[2].hist(lon-m_lon, bins=n_bins)
 
+csvfile.close()
 
 
 plt.show()

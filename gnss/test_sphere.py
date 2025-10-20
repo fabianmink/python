@@ -19,6 +19,31 @@ import matplotlib.pyplot as plt
 #y = r sin (phi) cos (theta) 
 #z = r sin (theta)
 
+def latlon2xyz(lat, lon, r=6370):
+    x = r * np.cos(lon / 180*np.pi) * np.cos(lat / 180*np.pi)
+    y = r * np.sin(lon / 180*np.pi) * np.cos(lat / 180*np.pi)
+    z = r * np.sin(lat / 180*np.pi)
+    
+    return x,y,z
+    
+
+def latlon2dxdydz(lat, lon, r=6370):
+    dx_dphi   = r * -np.sin(pos0_lon / 180*np.pi) * np.cos(pos0_lat / 180*np.pi)
+    dx_dtheta = r * np.cos(pos0_lon / 180*np.pi) * -np.sin(pos0_lat / 180*np.pi)
+    #dx_dr =
+
+    dy_dphi   = r * np.cos(pos0_lon / 180*np.pi) * np.cos(pos0_lat / 180*np.pi)
+    dy_dtheta = r * np.sin(pos0_lon / 180*np.pi) * -np.sin(pos0_lat / 180*np.pi)
+    #dy_dr =
+
+    dz_dphi   = 0
+    dz_dtheta = r * np.cos(pos0_lat / 180*np.pi)
+    #dy_dr =
+    
+    
+    #TODO Jacobi-Matrix definierten und zurückgeben
+    return []
+
 
 def WireframeSphere(centre=[0.,0.,0.], radius=1.,
                     n_meridians=20, n_circles_latitude=8):
@@ -86,7 +111,7 @@ posz_s = posz + dz_dtheta * DTHETA + dz_dphi * DPHI
 central_point=[0.,0.,0.]
 
 ax = plt.figure().add_subplot(projection='3d')
-ax.view_init(elev=20, azim=-15, roll=0)
+ax.view_init(elev=30, azim=-50, roll=0)
 
 #fig = plt.figure()
 #ax = fig.gca(projection='3d')
@@ -100,6 +125,14 @@ ax.plot(wireLon_x, wireLon_y, wireLon_z, 'r-')
 
 ax.plot_surface(posx_s, posy_s, posz_s, linewidth=0.5, alpha=0.5, edgecolors='k', facecolor='g')
 
+
+# Verbindunglinien Ursprung auf Kugel bei Änderung um dphi / dtheta (je 15°)
+pos0 = latlon2xyz(pos0_lat, pos0_lon)
+pos0_dphi = latlon2xyz(pos0_lat, pos0_lon+15)
+pos0_dtheta = latlon2xyz(pos0_lat+15, pos0_lon)
+ax.plot([0, pos0[0]], [0, pos0[1]], [0, pos0[2]], 'g-')
+ax.plot([0, pos0_dphi[0]], [0, pos0_dphi[1]], [0, pos0_dphi[2]], 'g-')
+ax.plot([0, pos0_dtheta[0]], [0, pos0_dtheta[1]], [0, pos0_dtheta[2]], 'g-')
 
 
 ax.quiver(posx, posy, posz, dx_dphi*delta_phi , dy_dphi*delta_phi , dz_dphi*delta_phi, color='k')

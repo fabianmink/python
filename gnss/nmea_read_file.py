@@ -41,6 +41,7 @@ t_since_start = []
 csvfile = open('gnss_data_fb.csv', 'w', newline='')
 
 fieldnames = ['time', 'lat', 'lon']
+#fieldnames = ['lat', 'lon']
 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
 writer.writeheader()
@@ -67,6 +68,7 @@ with open('output_2025-10-20_15-34-23_FB.log', 'rb') as stream:
             t_since_start.append( delta.total_seconds())
             
             writer.writerow({'time': thisdatetime.isoformat(), 'lat': thislat, 'lon': thislon})
+            #writer.writerow({'lat': thislat, 'lon': thislon})
         
     except :
         print(raw_data)

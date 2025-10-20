@@ -38,7 +38,7 @@ time = []
 t_since_start = []
 
 
-csvfile = open('gnss_data.csv', 'w', newline='')
+csvfile = open('gnss_data_fb.csv', 'w', newline='')
 
 fieldnames = ['time', 'lat', 'lon']
 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -46,29 +46,32 @@ writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 writer.writeheader()
 
 #pos correction
-#offs_lat = -0.07060
-#offs_lon =  0.12995
 offs_lat = 0
 offs_lon = 0
 
-with open('output_2025-10-19_14-23-55.log', 'rb') as stream:
+with open('output_2025-10-20_15-34-23_FB.log', 'rb') as stream:
   nmr = NMEAReader(stream, nmeaonly=True)
   for raw_data, parsed_data in nmr: 
-    #print(parsed_data)
     
-    if(parsed_data.identity == 'GNRMC'):
-        msg_GNRMC = parsed_data
-        thislat = msg_GNRMC.lat + offs_lat
-        thislon = msg_GNRMC.lon + offs_lon
-        lat.append(thislat)
-        lon.append(thislon)
-        thisdatetime = dt.datetime.combine(msg_GNRMC.date, msg_GNRMC.time)
-        time.append(thisdatetime)
+    try:
+        if(parsed_data.identity == 'GNRMC'):
+            msg_GNRMC = parsed_data
+            thislat = msg_GNRMC.lat + offs_lat
+            thislon = msg_GNRMC.lon + offs_lon
+            lat.append(thislat)
+            lon.append(thislon)
+            thisdatetime = dt.datetime.combine(msg_GNRMC.date, msg_GNRMC.time)
+            time.append(thisdatetime)
+            
+            delta = thisdatetime - time[0];
+            t_since_start.append( delta.total_seconds())
+            
+            writer.writerow({'time': thisdatetime.isoformat(), 'lat': thislat, 'lon': thislon})
         
-        delta = thisdatetime - time[0];
-        t_since_start.append( delta.total_seconds())
-        
-        writer.writerow({'time': thisdatetime.isoformat(), 'lat': thislat, 'lon': thislon})
+    except :
+        print(raw_data)
+        #print(parsed_data)
+        pass
         
 
 lat = np.array(lat)
@@ -87,5 +90,6 @@ axs[2].hist(lon-m_lon, bins=n_bins)
 
 csvfile.close()
 
+#plt.plot(time)
 
 plt.show()

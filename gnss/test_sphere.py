@@ -140,9 +140,26 @@ ax.quiver(posx, posy, posz, dx_dtheta*delta_theta, dy_dtheta*delta_theta, dz_dth
 
 #ax.plot(posx_s, posy_s, posz_s, 'gx-')
 
-ax.set_xlabel(r"$x / \mathrm{km}$")
-ax.set_ylabel(r"$y / \mathrm{km}$")
-ax.set_zlabel(r"$z / \mathrm{km}$")
+#ax.set_xlabel(r"$x / \mathrm{km}$")
+#ax.set_ylabel(r"$y / \mathrm{km}$")
+#ax.set_zlabel(r"$z / \mathrm{km}$")
+
+ax.set_axis_off()
+
+#ax.get_xaxis().set_ticklabels([])
+#ax.get_yaxis().set_ticklabels([])
+#ax.get_zaxis().set_ticklabels([])
+
+#ax.get_xaxis().set_ticks([])
+#ax.get_yaxis().set_ticks([])
+#ax.get_zaxis().set_ticks([])
+
+#ax.get_xaxis().set_visible(False)
+#ax.get_yaxis().set_visible(False)
+#ax.get_zaxis().set_visible(False)
+
+
+
 
 plt.savefig("earth.png", dpi=300)
 

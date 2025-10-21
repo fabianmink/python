@@ -32,6 +32,7 @@ import datetime as dt
 import csv
 
 
+
 lat = []
 lon = []
 time = []
@@ -50,7 +51,7 @@ writer.writeheader()
 offs_lat = 0
 offs_lon = 0
 
-with open('output_2025-10-20_15-34-23_FB.log', 'rb') as stream:
+with open('output_2025-10-21_07-48-44_fb.log', 'rb') as stream:
   nmr = NMEAReader(stream, nmeaonly=True)
   for raw_data, parsed_data in nmr: 
     

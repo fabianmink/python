@@ -30,7 +30,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
-#import drawPaper as dp
+import drawPaper as dp
 
 #Earth radius
 r = 6371000 #m
@@ -53,6 +53,7 @@ pos_lon = 8.75939
 
 #Get lat/lon data from csv-file
 with open('gnss_data_fb.csv') as csv_file:
+#with open('gnss_data_bu_fb.csv') as csv_file:
     home_lat = []
     home_lon = []
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -87,28 +88,28 @@ img = plt.imread(datafile)
 plt.imshow(img, extent=[map_x0, map_x0+map_size_x, map_y0, map_y0+map_size_y], zorder = -100 )
 
 
-plt.plot(delta_x, delta_y, 'r-', lw=1, zorder = 100)
+plt.plot(delta_x, delta_y, 'r-', lw=1, zorder = 2000)
 ax = plt.gca()
 ax.grid()
 ax.set_xlabel(r"$x / \mathrm{m}$")
 ax.set_ylabel(r"$y / \mathrm{m}$")
 
-#fig = ax.get_figure()
+fig = ax.get_figure()
 
-# myDim = {'x_cm_min' : 0.8,
-#          'x_cm_zero' : 5, 
-#          'y_cm_zero': 10,
-#          'x_scale': 100,
-#          'y_scale': 100,
-#          'x_cm' : 16,
-#          'y_cm' : 18,
-#          'x_label' : r'$x / \mathrm{m}$',
-#          'y_label' : r'$y / \mathrm{m}$',
-#          'fg_axes' : True,
-# }
+myDim = {'x_cm_min' : 0.8,
+         'x_cm_zero' : 5, 
+         'y_cm_zero': 10,
+         'x_scale': 100,
+         'y_scale': 100,
+         'x_cm' : 16,
+         'y_cm' : 18,
+         'x_label' : r'$x / \mathrm{m}$',
+         'y_label' : r'$y / \mathrm{m}$',
+         'fg_axes' : True,
+}
 
 #fig = plt.gcf()
-#dp.drawPaper(fig, **myDim);
+dp.drawPaper(fig, **myDim);
 
 plt.savefig("map_fb.png", dpi=300)
 

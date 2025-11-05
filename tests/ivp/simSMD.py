@@ -54,3 +54,5 @@ print(sol_ownRK4.y[0])
 print(sol_builtin_RK45.t)
 print(sol_builtin_RK45.y[0])
 
+plt.show()
+

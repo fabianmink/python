@@ -33,25 +33,31 @@ import csv
 
 
 
+include_time = False
+include_header = False
+
 lat = []
 lon = []
 time = []
 t_since_start = []
 
 
-csvfile = open('gnss_data_fb.csv', 'w', newline='')
+csvfile = open('gnss_data_mt-labor.csv', 'w', newline='')
 
-fieldnames = ['time', 'lat', 'lon']
-#fieldnames = ['lat', 'lon']
+fieldnames = ['lat', 'lon']
+if (include_time):
+    fieldnames = ['time', 'lat', 'lon']
+
 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-writer.writeheader()
+if (include_header):
+    writer.writeheader()
 
 #pos correction
 offs_lat = 0
 offs_lon = 0
 
-with open('output_2025-10-20_15-34-23_FB_THM_MT-Labor.log', 'rb') as stream:
+#with open('output_2025-10-20_15-34-23_FB_THM_MT-Labor.log', 'rb') as stream:
+with open('output_2025-10-22_12-51-55_FB_THM_MT-Labor.log', 'rb') as stream:    
   nmr = NMEAReader(stream, nmeaonly=True)
   for raw_data, parsed_data in nmr: 
     
@@ -68,8 +74,10 @@ with open('output_2025-10-20_15-34-23_FB_THM_MT-Labor.log', 'rb') as stream:
             delta = thisdatetime - time[0];
             t_since_start.append( delta.total_seconds())
             
-            writer.writerow({'time': thisdatetime.isoformat(), 'lat': thislat, 'lon': thislon})
-            #writer.writerow({'lat': thislat, 'lon': thislon})
+            if (include_time):
+                writer.writerow({'time': thisdatetime.isoformat(), 'lat': thislat, 'lon': thislon})
+            else:
+                writer.writerow({'lat': thislat, 'lon': thislon})
         
     except :
         print(raw_data)
@@ -91,8 +99,9 @@ n_bins = 20
 axs[1].hist(lat-m_lat, bins=n_bins)
 axs[2].hist(lon-m_lon, bins=n_bins)
 
+plt.figure()
 csvfile.close()
 
-#plt.plot(time)
+plt.plot(time)
 
 plt.show()

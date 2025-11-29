@@ -43,6 +43,12 @@ t_since_start = []
 offs_lat = 0
 offs_lon = 0
 
+#GPS overflow correction
+#offs_time = dt.timedelta(days=0)
+offs_time = dt.timedelta(days=7168)
+
+
+
 #
 pos0_lat = 50.33405  #° Must fit to x0
 pos0_lon = 8.75242   #° Must fit to y0
@@ -57,7 +63,7 @@ for track in gpx.tracks:
         for point in segment.points:
             #print(f'Point at ({point.latitude},{point.longitude}) h= {point.elevation}')
             
-            thisdatetime = point.time
+            thisdatetime = point.time + offs_time
             thislat = point.latitude + offs_lat
             thislon = point.longitude + offs_lon
             

@@ -37,8 +37,11 @@ try:
     # *** Test for R414A01 Temperatur /  Humidity Module ***
     
     #mbclient.write_register(2, 5, device_id=1) #write device id of device 1 to "5"
-    result = mbclient.read_holding_registers(0, count=4, device_id=5) #PyModbus V.4.0
+    #result = mbclient.read_holding_registers(0, count=4, device_id=5) #PyModbus V.4.0
     #Modbus-Request:  05 03 00 00 00 04 45 8D
+    
+    result = mbclient.read_holding_registers(0, count=2, device_id=5) #PyModbus V.4.0
+    #Modbus-Request:  05 03 00 00 00 02 C5 8F
     regs = result.registers
     #0 = temp
     #1 = humid

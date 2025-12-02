@@ -25,24 +25,39 @@
 #   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-#Test for R414A01 Temperatur /  Humidity Module
-
 import pymodbus.client as ModbusClient
 
+
 mbclient = ModbusClient.ModbusSerialClient( "COM5", baudrate=9600, bytesize=8, parity="N", stopbits=1)
+#mbclient = ModbusClient.ModbusSerialClient( "COM5", baudrate=19200, bytesize=8, parity="N", stopbits=1)
 
 mbclient.connect()  
 
-#mbclient.write_register(2, 5, device_id=1) #write device id of device 1 to "5"
-
-result = mbclient.read_holding_registers(0, count=4, device_id=5) #PyModbus V.4.0
-
-regs = result.registers
-#0 = temp
-#1 = humid
-#2 = deviceId
-#3 = baudrate (0=1200, 1=2400, 2=4800, 3=9600, 4=19200)
-
-print(regs)
+try:    
+    # *** Test for R414A01 Temperatur /  Humidity Module ***
+    
+    #mbclient.write_register(2, 5, device_id=1) #write device id of device 1 to "5"
+    result = mbclient.read_holding_registers(0, count=4, device_id=5) #PyModbus V.4.0
+    #Modbus-Request:  05 03 00 00 00 04 45 8D
+    regs = result.registers
+    #0 = temp
+    #1 = humid
+    #2 = deviceId
+    #3 = baudrate (0=1200, 1=2400, 2=4800, 3=9600, 4=19200)
+    
+    
+    # *** Test for PKTH100B Temperatur /  Humidity Module ***
+    #writing of registers does not work, as device uses non-standard modbus functionality
+        
+    #result = mbclient.read_holding_registers(0, count=2, device_id=3) 
+    #regs = result.registers
+    #0 = temp
+    #1 = humid
+    
+    print(regs)
+    
+except Exception as e:
+    print(e)
+    
 
 mbclient.close()    

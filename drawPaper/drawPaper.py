@@ -48,6 +48,9 @@ def drawPaper(fh="none", **kwargs):
     #grid resolution (currently fixed to .5cm)
     x_res = 0.5;
     y_res = 0.5;
+    
+    x_res = kwargs.get('x_cm_res',x_res) 
+    y_res = kwargs.get('y_cm_res',y_res) 
                 
     x_cm = kwargs.get('x_cm',10) #default value 10
     y_cm = kwargs.get('y_cm',10) 

@@ -46,7 +46,7 @@ def update(val):
     #print("hello")
     ue = ue_slider.val
     u_int = 0;
-    q = False;
+    q = True;
     
     ue_store = ue * np.ones(numsteps)
     uint_store = np.zeros(numsteps)

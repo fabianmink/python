@@ -41,12 +41,11 @@ Created on Tue Dec  2 11:17:51 2025
 # 06: 9600
 # 07: 19200
 
-#https://stackoverflow.com/questions/69369408/calculating-crc16-in-python-for-modbus
 
-def modbusCrc(msg:str) -> int:
+def calcModbusCrc(msg):
     crc = 0xFFFF
-    for n in range(len(msg)):
-        crc ^= msg[n]
+    for ibytes in range(len(msg)):
+        crc ^= msg[ibytes]
         for i in range(8):
             if crc & 1:
                 crc >>= 1
@@ -56,15 +55,19 @@ def modbusCrc(msg:str) -> int:
     return crc
 
 
-#msg = bytes.fromhex("030600000001020406") #set device address of id=3 to id=4, baudrate 9600
-#msg = bytes.fromhex("040600000001020306") #set device address of id=4 to id=3, baudrate 9600
+#msg_bytes = bytes.fromhex("030600000001020406") #set device address of id=3 to id=4, baudrate 9600
+#msg_bytes = bytes.fromhex("040600000001020306") #set device address of id=4 to id=3, baudrate 9600
 
-msg = bytes.fromhex("030600000001020307") #set device address of id=3 to id=3, baudrate 19200
+msg_bytes = bytes.fromhex("030600000001020307") #set device address of id=3 to id=3, baudrate 19200
+crc = calcModbusCrc(msg_bytes)
+crc_bytes = crc.to_bytes(2, byteorder='little') #Modbus CRC has Little Endian order
+msg_w_crc_bytes = msg_bytes + crc_bytes
 
-crc = modbusCrc(msg)
-print("0x%04X"%(crc)) 
+#print(crc_bytes.hex())
+#print(msg_w_crc_bytes.hex())
+print(''.join("%02X "%c for c in msg_bytes))
+print(''.join("%02X "%c for c in crc_bytes))
+print(''.join("%02X "%c for c in msg_w_crc_bytes))
 
-#On Modbus, bytes have to be added in this order
-ba = crc.to_bytes(2, byteorder='little')
-print("%02X %02X"%(ba[0], ba[1]))
+
 

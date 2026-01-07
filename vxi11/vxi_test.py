@@ -85,7 +85,9 @@ print(dScopeSiglent.ask("C1:TRA?"))
 #Timebase
 dScopeSiglent.write("TDIV 2e-4")
 print(dScopeSiglent.ask("TDIV?"))
-print(dScopeSiglent.ask("TRDL?"))
+trdl = dScopeSiglent.ask("TRDL?")
+print(trdl)
+Td = float((trdl.split()[1]).split("S")[0])
 
 #Trigger
 dScopeSiglent.write("C1:TRLV 0.0")
@@ -95,16 +97,16 @@ print(dScopeSiglent.ask("TRLV?"))
 print(dScopeSiglent.ask("TRSE?"))
 #print(dScopeSiglent.ask("TRSL?")) #Does not work
 
-#Sampling
+#Sampling rate
 sara = dScopeSiglent.ask("SARA?")
+print(sara)
 fs = float((sara.split()[1]).split("S")[0])
-print(dScopeSiglent.ask("SARA?"))
 
 #print(dScopeSiglent.ask("SANU?")) #Does not work
 
 
 #Setup Waveform
-dScopeSiglent.write("WFSU SP,1000,NP,10000,FP,0")
+dScopeSiglent.write("WFSU SP,0,NP,1000000,FP,0")
 
 #Query waveform
 #Raw query must be used, as return contain bytes that can not be utf-8 decoded
@@ -117,10 +119,14 @@ for value in struct.iter_unpack("b", wf_bytes): #interprete each byte as b="sign
     
 u_ch1 = np.array(wf) / 128.0 * 5.0;  #scale to 5V/div
     
-#sx = len(ch)
-#t = np.linspace(-1/fs*sx/2, 1/fs*sx/2, sx)    
+n_ch1 = len(u_ch1)
+t = np.linspace(-1/fs*n_ch1/2, 1/fs*n_ch1/2, n_ch1) - Td  
 
-plt.plot(wf, 'r-', lw=1)    
+plt.plot(t*1000, wf, 'r-', lw=1)  
+ax = plt.gca();
+ax.set_xlabel("t/ms")
+ax.set_ylabel("u/V")
+ax.grid()
  
   
 

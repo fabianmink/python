@@ -1,0 +1,15 @@
+Read Temperature & Humidity (Function Code 0x04):
+
+Command: 01 04 00 01 00 02 20 0B (Slave ID 01, Read 2 registers starting at 0001).
+Response: 01 04 04 [Temp H] [Temp L] [Hum H] [Hum L] [CRC H] [CRC L]
+
+
+Modify Slave ID (Function Code 0x06):
+Command: 01 06 01 01 00 02 59 D6 (Changes ID 01 to 02).
+
+Modify Baud Rate (Function Code 0x06):
+Command: 01 06 01 02 00 00 E9 D6 (Sets to 9600).
+Values: 0x0000=9600, 0x0001=14400, 0x0002=19200.
+
+Read Device Address/Settings (Function Code 0x03):
+Command: 01 03 01 01 00 02 94 36 (Reads from holding register 0x0101)

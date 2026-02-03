@@ -29,8 +29,8 @@ import pymodbus.client as ModbusClient
 import time
 
 
-mbclient = ModbusClient.ModbusSerialClient( "COM5", baudrate=9600, bytesize=8, parity="N", stopbits=1)
-#mbclient = ModbusClient.ModbusSerialClient( "COM4", baudrate=9600, bytesize=8, parity="N", stopbits=1)
+#mbclient = ModbusClient.ModbusSerialClient( "COM5", baudrate=9600, bytesize=8, parity="N", stopbits=1)
+mbclient = ModbusClient.ModbusSerialClient( "COM4", baudrate=9600, bytesize=8, parity="N", stopbits=1)
 #mbclient = ModbusClient.ModbusSerialClient( "COM5", baudrate=19200, bytesize=8, parity="N", stopbits=1)
 
 mbclient.connect()  
@@ -40,15 +40,16 @@ repeat = 1
 while(repeat) :
 
     try:    
+        regs = "none"
         # *** Test for R414A01 Temperatur /  Humidity Module ***
         
         #mbclient.write_register(2, 5, device_id=1) #write device id of device 1 to "5"
         #result = mbclient.read_holding_registers(0, count=4, device_id=5) #PyModbus V.4.0
         #Modbus-Request:  05 03 00 00 00 04 45 8D
         
-        result = mbclient.read_holding_registers(0, count=2, device_id=5) #PyModbus V.4.0
+        #result = mbclient.read_holding_registers(0, count=2, device_id=5) #PyModbus V.4.0
         #Modbus-Request:  05 03 00 00 00 02 C5 8F
-        regs = result.registers
+        #regs = result.registers
         #0 = temp
         #1 = humid
         #2 = deviceId
@@ -64,10 +65,11 @@ while(repeat) :
         #1 = humid
         
         # *** Test for SHT20 Temperatur /  Humidity Module ***#
-        #mbclient.write_register(257, 7, device_id=1) #write device id of device 1 to "7"
-        #result = mbclient.read_input_registers(1, count=2, device_id=1)
-        #result = mbclient.read_holding_registers(257, count=2, device_id=1)
-        #regs = result.registers
+        #mbclient.write_registers(257, [7,9600], device_id=1) #write device id of device 1 to "7" and baudrate to 9600 #register write works, but does not make a change
+        #mbclient.write_register(257, 7, device_id=1) #write device id of device 1 to "7" #register write works, but does not make a change
+        result = mbclient.read_input_registers(1, count=2, device_id=1)
+        #result = mbclient.read_holding_registers(257, count=2, device_id=1) 
+        regs = result.registers
         #0 = temp
         #1 = humid
                         

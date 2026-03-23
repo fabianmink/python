@@ -66,9 +66,19 @@ myDim = {'x_cm_zero' : 5,
 
 plt.clf()
 
-plt.arrow(0,0,1,1,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='red',fc='red')
-plt.arrow(1,1,4,2,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='blue',fc='blue')
-plt.arrow(5,3,-2,-2.5,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='green',fc='green')
+handdrawn = True
+if(handdrawn):
+    with plt.xkcd():
+        plt.arrow(0,0,1,1,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='red',fc='red')
+        plt.arrow(1,1,4,2,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='blue',fc='blue')
+        plt.arrow(5,3,-2,-2.5,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='green',fc='green')
+
+else:
+    plt.arrow(0,0,1,1,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='red',fc='red')
+    plt.arrow(1,1,4,2,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='blue',fc='blue')
+    plt.arrow(5,3,-2,-2.5,width=0.01,head_width=0.15,head_length=0.2,length_includes_head=True,ec='green',fc='green')
+
+    
 dp.drawPaper(fig, **myDim);
 plt.savefig("test_arrow.png", dpi=300)
 

@@ -8,9 +8,17 @@ Created on Fri Mar 20 08:15:27 2026
 import schemdraw
 import schemdraw.elements as elm
 
+handdrawn = True
+if(handdrawn):
+    import matplotlib.pyplot as plt
+    plt.xkcd()
+    schemdraw.use('matplotlib')
+
 
 schemdraw.config(inches_per_unit=0.8/2.54, lw = 1.0, fontsize=11)
 elm.style(elm.STYLE_IEC)
+
+
 
     
 with schemdraw.Drawing(file='rclr_circuit.png', dpi=300) as d:

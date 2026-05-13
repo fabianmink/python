@@ -12,7 +12,7 @@ import math
 gap = (math.nan, math.nan)  # Put a gap in a path
 
 class SourceU(elm.Element2Term):
-    ''' Generic source element '''
+    ''' Voltage source element acc. to EN60617-2'''
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.segments.append(seg.Segment([(0, 0), (1, 0)]))
@@ -20,7 +20,7 @@ class SourceU(elm.Element2Term):
         self.elmparams['theta'] = 90
         
 class SourceI(elm.Element2Term):
-    ''' Generic source element '''
+    ''' Current source element acc. to EN60617-2 '''
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.segments.append(seg.Segment([(0, 0), (0, 0), gap, (1, 0), (1, 0)]))

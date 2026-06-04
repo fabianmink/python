@@ -24,6 +24,7 @@ with schemdraw.Drawing(file='noninv_amp_circuit.png', dpi=300) as d:
     R2 = elm.Resistor().toy(op.out).idot().label(r'$R_{2}$', loc='bot')
     elm.Dot()
     R1 = elm.Resistor().down().at(R2.start).label(r'$R_{1}$', loc='bot')
+    elm.Vss()
     
     d.push()
     elm.Dot()

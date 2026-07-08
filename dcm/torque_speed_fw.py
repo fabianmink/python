@@ -88,6 +88,11 @@ for Ua_nofw in Ua_vals:
 
 
 #Speed for maximum torque, non-fw
+n_Iamax_mot = ss_DCM_n_Ia(Ua, Iamax, kPhi)
+n_Iamax_gen = ss_DCM_n_Ia(Ua, -Iamax, kPhi)
+Me_Iamax = kPhi * Iamax
+
+#Speed for maximum torque, in fw operation
 n_ss_maxM_mot = ss_DCM_n_maxM(Ua, Iamax, Me_ss)
 n_ss_maxM_mot[(n_ss_maxM_mot > nMax)] = np.nan
 n_ss_maxM_mot[(n_ss_maxM_mot < -nMax)] = np.nan
@@ -98,11 +103,6 @@ n_ss_maxM_gen[(n_ss_maxM_gen < -nMax)] = np.nan
 
 plt.plot(Me_ss*1000, n_ss_maxM_mot*60, 'r-', lw=1)
 plt.plot(Me_ss*1000, n_ss_maxM_gen*60, 'r-', lw=1)
-
-#Speed for maximum torque, in fw operation
-n_Iamax_mot = ss_DCM_n_Ia(Ua, Iamax, kPhi)
-n_Iamax_gen = ss_DCM_n_Ia(Ua, -Iamax, kPhi)
-Me_Iamax = kPhi * Iamax
 
 Me_nmax_mot = ss_DCM_maxM_n(Ua, Iamax, nMax)
 Me_nmax_gen = ss_DCM_maxM_n(Ua, -Iamax, nMax)

@@ -13,6 +13,17 @@ kPhi = 0.05  #Vs
 b_v = 0      #Nm/(rad/s)
 #b_v = 0.00001  #Nm/ (rad/s)  #optional viscous friction
 
+Ua = 20
+Ml_step = 10e-3
+t_Ml_step = 0.2
+
+#add IVP / simulation parameters
+T_max = 0.4
+Ts = 0.1e-3 
+w0 = 0
+ia0 = 0
+
+
 Asys = np.array([[-Ra/La, -kPhi/La], [kPhi/J, 0/J]])
 bsys = np.array([[1/La, 0],  [0, 1/J]])
 csys = np.array([[0, 1]])
@@ -22,8 +33,6 @@ sys = signal.StateSpace(Asys, bsys, csys)
 eigv = np.linalg.eigvals(Asys)
 print(eigv)
 
-Ua = 20
-Ml_step = 10e-3
 
 def ss_DCM(Ua, Me):
     n = Ua/(2*math.pi*kPhi) - Ra/(2*math.pi*(kPhi**2))*Me
@@ -37,7 +46,7 @@ def ode_DCM(t, statevars):
     Me = kPhi * ia
     Ml = 0
     
-    if(t > 0.2):
+    if(t > t_Ml_step):
         Ml = Ml_step
     #calculation of derivatives    
     dia_dt = 1/La * (Ua - Ra*ia - Ui)  
@@ -49,11 +58,6 @@ def ode_DCM(t, statevars):
     return der_statevars 
 
 
-#add IVP / simulation parameters
-T_max = 0.4
-Ts = 0.1e-3 
-w0 = 0
-ia0 = 0
 
 sol = solve_ivp(ode_DCM, [0,T_max], [w0,ia0], method='RK45', max_step=Ts)
 
@@ -85,7 +89,7 @@ plt.savefig("dcm_dynamic.png", dpi=300)
 
 plt.figure()
 plt.plot(Me*1000, w/2/math.pi*60, 'b-')
-plt.plot([0, 26.4, 0, 10], [0, 0, 3820, 2370], 'rx')
+plt.plot([0, Ua/Ra*kPhi*1000, 0, 10], [0, 0, ss_DCM(Ua, 0)*60, ss_DCM(Ua, Ml_step)*60], 'rx')
 
 Me_ss = np.linspace(-5e-3,28e-3,1000)
 n_ss = ss_DCM(Ua, Me_ss)
@@ -111,7 +115,7 @@ myDim = {
          'x_label' : r'$M / \mathrm{mNm}$',
 }
 
-fig = plt.gcf()
+#fig = plt.gcf()
 #dp.drawPaper(fig, **myDim);   #graph paper background
 
 plt.savefig("dcm_dynamic_n_M.png", dpi=300)

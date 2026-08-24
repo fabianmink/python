@@ -31,6 +31,8 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 
+
+# Motor 1
 Ra = 38      #Ohm
 La = 40e-3   #H
 kPhi = 0.05  #Vs
@@ -56,6 +58,36 @@ myDim = {
          'y_label' : r'$n / \mathrm{min^{-1}}$',
          'x_label' : r'$M / \mathrm{mNm}$',
 }
+M_scale = 1000
+
+# Motor 2
+# Ra = 1.2    #Ohm
+# La = 2e-3   #H
+# kPhi = 1.4  #Vs
+
+# Ua = 500
+# nMax = 4000/60 #s^-1
+# Iamax = 20      #A
+
+# kPhi_fw = []
+# Ua_vals = np.linspace(-Ua,Ua,9)
+
+
+# myDim = {
+#          'x_scale': 10,
+#          'y_scale': 1000,
+#          'x_cm_zero': 5,
+#          'y_cm_zero': 6.5,
+#          'x_cm' : 11.5,
+#          'x_cm_tick' : 2,
+#          'y_cm_tick' : 1,
+#          'x_cm_max' : 9.5,
+#          'y_cm' : 13.5,
+#          'y_label' : r'$n / \mathrm{min^{-1}}$',
+#          'x_label' : r'$M / \mathrm{Nm}$',
+# }
+# M_scale = 1
+
 
 def ss_DCM_n(Ua, Me):
     n = Ua/(2*math.pi*kPhi) - Ra/(2*math.pi*(kPhi**2))*Me
@@ -80,7 +112,7 @@ Me_ss = Ia_ss * kPhi
 #Steady-state torque-speed without field weakening
 for Ua_nofw in Ua_vals:
     n_ss_mot = ss_DCM_n(Ua_nofw, Me_ss)
-    plt.plot(Me_ss*1000, n_ss_mot*60, 'k-', lw=1)
+    plt.plot(Me_ss*M_scale, n_ss_mot*60, 'k-', lw=1)
     
     #no-load speed
     #n0 = ss_DCM_n_Ia(Ua_nofw, 0, kPhi)
@@ -101,17 +133,17 @@ n_ss_maxM_gen = ss_DCM_n_maxM(Ua, -Iamax, Me_ss)
 n_ss_maxM_gen[(n_ss_maxM_gen > nMax)] = np.nan
 n_ss_maxM_gen[(n_ss_maxM_gen < -nMax)] = np.nan
 
-plt.plot(Me_ss*1000, n_ss_maxM_mot*60, 'r-', lw=1)
-plt.plot(Me_ss*1000, n_ss_maxM_gen*60, 'r-', lw=1)
+plt.plot(Me_ss*M_scale, n_ss_maxM_mot*60, 'r-', lw=1)
+plt.plot(Me_ss*M_scale, n_ss_maxM_gen*60, 'r-', lw=1)
 
 Me_nmax_mot = ss_DCM_maxM_n(Ua, Iamax, nMax)
 Me_nmax_gen = ss_DCM_maxM_n(Ua, -Iamax, nMax)
 
-plt.plot([Me_Iamax*1000, Me_Iamax*1000], [n_Iamax_mot*60, -n_Iamax_gen*60], 'r-')
-plt.plot([-Me_Iamax*1000, -Me_Iamax*1000], [-n_Iamax_mot*60, n_Iamax_gen*60], 'r-')
+plt.plot([Me_Iamax*M_scale, Me_Iamax*M_scale], [n_Iamax_mot*60, -n_Iamax_gen*60], 'r-')
+plt.plot([-Me_Iamax*M_scale, -Me_Iamax*M_scale], [-n_Iamax_mot*60, n_Iamax_gen*60], 'r-')
 
-plt.plot([Me_nmax_mot*1000, Me_nmax_gen*1000], [nMax*60, nMax*60], 'r-')
-plt.plot([-Me_nmax_mot*1000, -Me_nmax_gen*1000], [-nMax*60, -nMax*60], 'r-')
+plt.plot([Me_nmax_mot*M_scale, Me_nmax_gen*M_scale], [nMax*60, nMax*60], 'r-')
+plt.plot([-Me_nmax_mot*M_scale, -Me_nmax_gen*M_scale], [-nMax*60, -nMax*60], 'r-')
 
 #Steady-state torque-speed in field weakening
 for kPhi in kPhi_fw :
@@ -123,8 +155,8 @@ for kPhi in kPhi_fw :
     n_ss_fw_gen = ss_DCM_n_Ia(-Ua, Ia_ss_fw, kPhi)
     n_ss_fw_gen[(n_ss_fw_gen < -nMax)] = np.nan
     
-    plt.plot(Me_ss_fw*1000, n_ss_fw_mot*60, 'k-', lw=1)
-    plt.plot(Me_ss_fw*1000, n_ss_fw_gen*60, 'k-', lw=1)
+    plt.plot(Me_ss_fw*M_scale, n_ss_fw_mot*60, 'k-', lw=1)
+    plt.plot(Me_ss_fw*M_scale, n_ss_fw_gen*60, 'k-', lw=1)
 
 
 fig = plt.gcf()

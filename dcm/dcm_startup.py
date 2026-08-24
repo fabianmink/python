@@ -24,14 +24,23 @@ w0 = 0
 ia0 = 0
 
 
-Asys = np.array([[-Ra/La, -kPhi/La], [kPhi/J, 0/J]])
-bsys = np.array([[1/La, 0],  [0, 1/J]])
-csys = np.array([[0, 1]])
-#dsys = np.array([[0]])
+Asys = [[-Ra/La, -kPhi/La], [kPhi/J, 0/J]]
+bsys = [[1/La, 0],  [0, -1/J]]
+csys = [[0, 1]]
+#dsys = [[0]]
 
 sys = signal.StateSpace(Asys, bsys, csys)
 eigv = np.linalg.eigvals(Asys)
 print(eigv)
+
+
+Asys_simplified = [[-1/J*kPhi**2/Ra -b_v/J]]
+bsys_simplified = [[1/J*kPhi/Ra, -1/J]]
+csys_simplified = [[1]]
+
+sys_simplified = signal.StateSpace(Asys_simplified, bsys_simplified, csys_simplified)
+eigv_simplified = np.linalg.eigvals(Asys_simplified)
+print(eigv_simplified)
 
 
 def ss_DCM(Ua, Me):

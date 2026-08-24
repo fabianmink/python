@@ -57,26 +57,69 @@ def ode_DCM(t, statevars):
 
     return der_statevars 
 
+#Simplified; for La = 0
+def ode_DCM_simplified(t, statevars):
+    w = statevars[0]
+    
+    Ui = kPhi * w
+    ia = (Ua - Ui)/Ra
+    Me = kPhi * ia
+    Ml = 0
+    
+    if(t > t_Ml_step):
+        Ml = Ml_step
+        
+    #calculation of derivatives    
+    dw_dt = 1/J * (Me - b_v*w - Ml)  
+    
+    der_statevars = [dw_dt]
+
+    return der_statevars
+
+#Simplified; for La = 0, without calculation of intermediate results
+def ode_DCM_simplified2(t, statevars):
+    w = statevars[0]
+    
+    Ml = 0
+    
+    if(t > t_Ml_step):
+        Ml = Ml_step
+        
+    #calculation of derivatives    
+    dw_dt = -1/J*kPhi**2/Ra * w  +  1/J*kPhi/Ra * Ua  -  1/J * Ml
+    
+    der_statevars = [dw_dt]
+
+    return der_statevars
+
 
 
 sol = solve_ivp(ode_DCM, [0,T_max], [w0,ia0], method='RK45', max_step=Ts)
-
 w = sol.y[0]
 ia = sol.y[1]
 Me = sol.y[1] * kPhi
 t = sol.t
 
+sol_simplified = solve_ivp(ode_DCM_simplified2, [0,T_max], [w0], method='RK45', max_step=Ts)
+w_simplified = sol_simplified.y[0]
+ia_simplified = (Ua - w_simplified*kPhi)/Ra
+Me_simplified = ia_simplified * kPhi
+t_simplified = sol_simplified.t
+
 fig, (ax_n, ax_i, ax_M) = plt.subplots(3, 1)
 
 ax_n.plot(t, w/2/math.pi*60, 'b-')
+ax_n.plot(t_simplified, w_simplified/2/math.pi*60, 'k--')
 ax_n.grid(1)
 ax_n.set_ylabel(r"$n/ \mathrm{min^{-1}}$")
 
 ax_i.plot(t, ia, 'b-')
+ax_i.plot(t_simplified, ia_simplified, 'k--')
 ax_i.grid(1)
 ax_i.set_ylabel(r"$i_\mathrm{A}/ \mathrm{A}$")
 
 ax_M.plot(t, Me*1000, 'b-')
+ax_M.plot(t_simplified, Me_simplified*1000, 'k--')
 ax_M.grid(1)
 ax_M.set_ylabel(r"$M_\mathrm{e}/ \mathrm{mNm}$")
 

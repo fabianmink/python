@@ -86,7 +86,7 @@ def ode_DCM_simplified2(t, statevars):
         Ml = Ml_step
         
     #calculation of derivatives    
-    dw_dt = -1/J*kPhi**2/Ra * w  +  1/J*kPhi/Ra * Ua  -  1/J * Ml
+    dw_dt = (-1/J*kPhi**2/Ra - b_v/J) * w  +  1/J*kPhi/Ra * Ua  -  1/J * Ml
     
     der_statevars = [dw_dt]
 
